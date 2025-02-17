@@ -44,12 +44,12 @@ module Redmine::MenuManager::TopMenuHelper
   end
 
   def render_top_menu_center
-    content_tag :div, class: "op-logo" do
-      mode_class = User.current.pref.high_contrast_theme? ? "op-logo--link_high_contrast" : ""
-      link_to(I18n.t("label_home"),
-              configurable_home_url,
-              class: "op-logo--link #{mode_class}")
-    end
+    # content_tag :div, class: "op-logo" do
+    #   mode_class = User.current.pref.high_contrast_theme? ? "op-logo--link_high_contrast" : ""
+    #   link_to(I18n.t("label_home"),
+    #           configurable_home_url,
+    #           class: "op-logo--link #{mode_class}")
+    # end
   end
 
   def render_top_menu_search

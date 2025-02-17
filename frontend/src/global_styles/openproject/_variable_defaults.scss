@@ -29,11 +29,38 @@
 
 // use CSS4 variables for easier theming
 :root {
-  --primary-button-color: #1F883D;
-  --primary-button-color--major1: #197032;
-  --primary-button-color--minor1: #d2e7d8;
-  --primary-button-color--minor2: #a5cfb1;
-  --primary-button-color--dark-mode: #238636;
+  /* blue */
+  --theme-primary-h: 213;
+    --theme-primary-s: 100%;
+    --theme-primary-l: 23%;
+
+    --theme-primary: hsl(var(--theme-primary-h), var(--theme-primary-s), var(--theme-primary-l));
+    --theme-primary-10: hsl(
+      var(--theme-primary-h),
+      var(--theme-primary-s),
+      calc(var(--theme-primary-l) + 5%)
+  );
+  --theme-primary-20: hsl(
+    var(--theme-primary-h),
+    var(--theme-primary-s),
+    calc(var(--theme-primary-l) + 10%)
+  );
+  --theme-primary-70: hsl(
+    var(--theme-primary-h),
+    var(--theme-primary-s),
+    calc(var(--theme-primary-l) + 35%)
+  );
+  --theme-primary-80: hsl(
+      var(--theme-primary-h),
+      var(--theme-primary-s),
+      calc(var(--theme-primary-l) + 40%)
+  );
+
+  --primary-button-color: var(--theme-primary);
+  --primary-button-color--major1: var(--theme-primary-10);
+  --primary-button-color--minor1: var(--theme-primary-70);
+  --primary-button-color--minor2: var(--theme-primary-80);
+  --primary-button-color--dark-mode: var(--theme-primary);
 
   --control-checked-color: var(--accent-color);
   --control-checked-color--major1: var(--accent-color--major1);
@@ -61,36 +88,36 @@
   --base-line-height: 1.5;
   --base-text-weight-bold: 600;
   --secondary-color: #bfbfbf;
-  --accent-color: #1A67A3;
-  --accent-color--major1: #155282;
-  --accent-color--major2: #103e62;
+  --accent-color: var(--theme-primary);
+  --accent-color--major1: var(--theme-primary-10);
+  --accent-color--major2: var(--theme-primary-20);
   --accent-color--minor1: #d1e1ed;
   --accent-color--minor2: #a3c2da;
-  --accent-color--dark-mode: #4493f8;
+  --accent-color--dark-mode: var(--theme-primary);
   --font-color-on-primary: #FFFFFF;
   --list-side-margin: 40px;
   --header-height: 55px;
-  --header-bg-color: #1A67A3;
+  --header-bg-color: var(--theme-primary);
   --header-border-bottom-color: #155282;
   --header-border-bottom-width: 0;
   --header-item-font-size: 14px;
   --header-item-font-color: #FFFFFF;
   --header-item-font-hover-color: #FFFFFF;
-  --header-item-bg-hover-color: #175A8E;
+  --header-item-bg-hover-color: var(--theme-primary-10);
   --main-menu-width: 230px;
   --main-menu-x-spacing: 16px;
   --main-menu-x-spacing-small: 12px;
   --main-menu-folded-width: 0px;
-  --main-menu-border-color: #EAEAEA;
-  --main-menu-border-width: 0px;
+  --main-menu-border-color: #c2c2c2;
+  --main-menu-border-width: 1px;
   --main-menu-item-height: 40px;
-  --main-menu-bg-color: #333739;
-  --main-menu-bg-selected-background: #175A8E;
-  --main-menu-bg-hover-background: #124E7C;
-  --main-menu-font-color: #FFFFFF;
-  --main-menu-hover-font-color: #FFFFFF;
+  --main-menu-bg-color: #FFFFFF;
+  --main-menu-bg-selected-background: #e7eaf2;
+  --main-menu-bg-hover-background: transparent;
+  --main-menu-font-color: var(--theme-primary);
+  --main-menu-hover-font-color: var(--theme-primary-80);
   --main-menu-resizer-color: var(--main-menu-border-color);
-  --main-menu-selected-font-color: #FFFFFF;
+  --main-menu-selected-font-color: var(--theme-primary);
   --main-menu-font-size: 14px;
   --main-menu-fieldset-header-color: #B0B2B3;
   --main-menu-hover-border-color: transparent;
@@ -100,8 +127,8 @@
   --breadcrumb-font-color: lighten(var(--body-font-color), 20);
   --content-icon-color: var(--accent-color);
   --content-form-input-hover-border: 1px solid #888888;
-  --content-form-error-color: #9E2A1C;
-  --content-form-danger-zone-bg-color: #CA3F3F;
+  --content-form-error-color: #ff5252;
+  --content-form-danger-zone-bg-color: #ff1a1a;
   --content-form-danger-zone-font-color: #FFFFFF;
   --drop-down-selected-bg-color: #E7E7E7;
   --drop-down-hover-bg-color: #EFEFEF;

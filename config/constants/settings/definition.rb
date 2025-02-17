@@ -349,7 +349,7 @@ module Settings
       },
       development_highlight_enabled: {
         description: "Enable highlighting of development environment",
-        default: -> { Rails.env.development? },
+        default: -> { false },
         format: :boolean
       },
       diff_max_lines_displayed: {
