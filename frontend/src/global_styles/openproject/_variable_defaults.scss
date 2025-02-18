@@ -45,6 +45,11 @@
     var(--theme-primary-s),
     calc(var(--theme-primary-l) + 10%)
   );
+  --theme-primary-40: hsl(
+    var(--theme-primary-h),
+    var(--theme-primary-s),
+    calc(var(--theme-primary-l) + 20%)
+  );
   --theme-primary-70: hsl(
     var(--theme-primary-h),
     var(--theme-primary-s),
@@ -93,7 +98,7 @@
   --accent-color--major2: var(--theme-primary-20);
   --accent-color--minor1: #d1e1ed;
   --accent-color--minor2: #a3c2da;
-  --accent-color--dark-mode: var(--theme-primary);
+  --accent-color--dark-mode: var(--theme-primary-40);
   --font-color-on-primary: #FFFFFF;
   --list-side-margin: 40px;
   --header-height: 55px;

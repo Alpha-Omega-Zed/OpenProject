@@ -36,9 +36,9 @@ module ::WorkPackages
       :overdue,
       :summary,
       :created_by_me,
-      :assigned_to_me,
-      :shared_with_users,
-      :shared_with_me
+      :assigned_to_me
+      # :shared_with_users,
+      # :shared_with_me
     ].freeze
 
     DEFAULT_PARAMS =

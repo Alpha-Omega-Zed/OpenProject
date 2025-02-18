@@ -102,12 +102,12 @@ module Redmine::MenuManager::TopMenu::HelpMenu
     end
     result << static_link_item(:shortcuts)
     result << static_link_item(:forums)
-    enterprise_support_link_key = if EnterpriseToken.active?
-                                    :enterprise_support
-                                  else
-                                    :enterprise_support_as_community
-                                  end
-    result << static_link_item(enterprise_support_link_key)
+    # enterprise_support_link_key = if EnterpriseToken.active?
+    #                                 :enterprise_support
+    #                               else
+    #                                 :enterprise_support_as_community
+    #                               end
+    # result << static_link_item(enterprise_support_link_key)
     result << content_tag(:hr, "", class: "op-menu--separator")
   end
 

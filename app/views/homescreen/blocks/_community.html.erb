@@ -9,9 +9,9 @@
   </li>
   <li>
     <%= static_link_to :forums %></li>
-  <li>
+  <!--<li>
     <%= static_link_to (EnterpriseToken.active? ? :enterprise_support : :enterprise_support_as_community) %>
-  </li>
+  </li>-->
   <li>
     <%= link_to(
           t("label_openproject_website"), "#{OpenProject::Static::Links.links[:website][:href]}/?utm_source=unknown&utm_medium=op-instance&utm_campaign=website-home-screen",

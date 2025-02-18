@@ -185,7 +185,16 @@ module Settings
       },
       blacklisted_routes: {
         description: "Blocked routes to prevent access to certain modules or pages",
-        default: [],
+        default: ["work_packages/share_upsale",
+                  "team_planners/upsale",
+                  "notifications/share_upsale",
+                  "notifications/date_alerts",
+                  "placeholder_users",
+                  "admin/design",
+                  "admin/saml/providers",
+                  "admin/openid_connect/providers",
+                  "ldap_groups/synchronized_groups",
+                  "admin/custom_actions"],
         writable: false # used in initializer
       },
       bcc_recipients: {
@@ -405,7 +414,7 @@ module Settings
       },
       ee_manager_visible: {
         description: "Show or hide the Enterprise configuration page and enterprise banners",
-        default: true,
+        default: false,
         writable: false
       },
       enable_internal_assets_server: {
@@ -579,7 +588,15 @@ module Settings
       },
       hidden_menu_items: {
         description: "Hide menu items in the menu sidebar for each main menu (such as Administration and Projects).",
-        default: {},
+        default: { "admin_menu" => ["placeholder_users",
+                                    "custom_style",
+                                    "plugin_saml",
+                                    "plugin_openid_connect",
+                                    "plugin_ldap_groups",
+                                    "custom_actions"],
+                   "top_menu" => ["team_planners"],
+                   "global_menu" => ["team_planners"],
+                   "project_menu" => ["team_planner_view"] },
         writable: false # cached in global variable
       },
       impressum_link: {
