@@ -122,6 +122,7 @@ class ApplicationMailer < ActionMailer::Base
   def mail(headers = {}, &block)
     block ||= method(:default_formats_for_setting)
     to = headers[:to]
+    attachments.inline["aoz_logo.png"] = Rails.root.join("app/assets/images/aoz_logo.png").read
 
     if to
       raise ArgumentError, "Recipient needs to be instance of User" unless to.is_a?(User)

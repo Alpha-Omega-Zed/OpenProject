@@ -32,15 +32,14 @@ See COPYRIGHT and LICENSE files for more details.
   isRu = I18n.locale == :ru
 
   logo_url = if isRu
-               asset_path("logo-white-bg-ua.png")
+               asset_path("aoz_logo.png")
              else
-               asset_path("logo_openproject_white_big.png")
+               asset_path("aoz_logo.png")
              end
-
   high_contrast_logo_url = if isRu
-                             asset_path("logo-black-bg-ua.png")
+                             asset_path("aoz_logo.png")
                            else
-                             asset_path("logo_openproject.png")
+                             asset_path("aoz_logo.png")
                            end
 
   high_contrast_bim_logo_url = asset_path("bim/logo_openproject_bim_big_coloured.png")
@@ -52,8 +51,8 @@ See COPYRIGHT and LICENSE files for more details.
       logo_url = asset_path(CustomStyle.current.theme_logo)
     end
     
-    if isRu && logo_url == asset_path("logo_openproject.png")
-      logo_url = asset_path("logo-black-bg-ua.png")
+    if isRu && logo_url == asset_path("aoz_logo.png")
+      logo_url = asset_path("aoz_logo.png")
     end
   end
   %>

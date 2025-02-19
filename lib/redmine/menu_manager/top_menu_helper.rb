@@ -46,9 +46,16 @@ module Redmine::MenuManager::TopMenuHelper
   def render_top_menu_center
     content_tag :div, class: "op-logo" do
       mode_class = User.current.pref.high_contrast_theme? ? "op-logo--link_high_contrast" : ""
-      link_to(I18n.t("label_home"),
-              configurable_home_url,
-              class: "op-logo--link #{mode_class}")
+
+      link = link_to(I18n.t("label_home"),
+                     configurable_home_url,
+                     class: "op-logo--link #{mode_class}")
+
+      title = link_to("Project Management",
+                      configurable_home_url,
+                      class: "system-title")
+
+      link + title
     end
   end
 

@@ -194,7 +194,8 @@ module Settings
                   "admin/saml/providers",
                   "admin/openid_connect/providers",
                   "ldap_groups/synchronized_groups",
-                  "admin/custom_actions"],
+                  "admin/custom_actions",
+                  "admin/settings/virus_scanning"],
         writable: false # used in initializer
       },
       bcc_recipients: {

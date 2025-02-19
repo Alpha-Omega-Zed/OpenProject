@@ -39,9 +39,10 @@ See COPYRIGHT and LICENSE files for more details.
         font-size: 0.8em;
         color: #484848;
         background: #FFFFFF;
+        margin: 0;
+        padding: 0;
       }
 
-      /* Enforcing the white background */
       @media (prefers-color-scheme: dark) {
         body {
           color: #484848 !important;
@@ -49,78 +50,102 @@ See COPYRIGHT and LICENSE files for more details.
         }
       }
 
-      h1, h2, h3 { font-family: "Trebuchet MS", Verdana, sans-serif; margin: 0px; }
-      h1 { font-size: 1.2em; }
-      h2, h3 { font-size: 1.1em; }
-      h2.emailTitle { color: #1a67a3; font-size: 2em; }
-      a, a:link, a:visited { color: #2A5685;}
-      a:hover, a:active { color: #c61a1a; }
-      a.op-uc-link_permalink { display: none; }
-      hr {
-        width: 100%;
-        height: 1px;
-        background: #ccc;
-        border: 0;
+      .container {
+        text-align: center;
+        background-color: #f5f5f5;
+        color: white;
+        padding-bottom: 20px;
       }
-      blockquote {
-        border-left: 3px solid #E0E0E0;
-        font-style: italic;
-        margin-left: 2.4em;
-        padding-left: 0.6em;
+
+      .header {
+        background-color: #003575;
+        padding: 10px 0px;
+        font-size: 1.25rem;
+        display: inline-block;
+        align-items: center;
+		    width:100%
       }
-      pre {
-        white-space: normal;
+
+      .content {
+        text-align: left;
+        background-color: #ffffff;
+        border-radius: 10px;
+        margin: 20px auto;
+        max-width: 650px;
+        border: 1px solid #f0f0f0;
+        padding: 20px;
+        color: #303030;
       }
-      img {
-        width: 100%;
-      }
+
       .footer {
         font-size: 0.8em;
         font-style: italic;
         border-top-width: 1px;
         border-top-color: #ccc;
         border-top-style: solid;
+        text-align: center;
+        padding-top: 10px;
       }
-      .header,
-      .body,
-      .footer {
-        max-width: 700px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+
+      .footer-note {
+        border-top: 1px solid #eeeeee;
+        padding-top: 20px;
+        margin-top: 20px !important;
+        color: #777777;
+        text-align: justify;
       }
-      a.user-mention:before {
-        content: '@';
-        color: #878787;
+
+      .title {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .copyright {
+        margin-bottom: 10px;
+        color: #777777;
+      }
+
+      .logo {
+        height: 30px;
+        width: auto;
+        vertical-align: middle;
+
+      }
+
+      .system-title {
+        text-align: center;
+        color: #ffffff;
+        vertical-align: middle;
+
       }
     </style>
-
-    <meta name="x-apple-disable-message-reformatting">
-    <meta name="viewport" content="initial-scale=1.0">
   </head>
-  <body style="padding: 0">
-      <table class="header">
-        <tr>
-          <td>
-            <%= OpenProject::TextFormatting::Renderer.format_text(Setting.localized_emails_header) %>
-          </td>
-        </tr>
-      </table>
-      <%= call_hook(:view_layouts_mailer_html_before_content, assigns) %>
-      <table class="body">
-        <tr>
-          <td>
-            <%= yield %>
-          </td>
-        </tr>
-      </table>
-      <%= call_hook(:view_layouts_mailer_html_after_content, assigns) %>
-      <table class="footer">
-        <tr>
-          <td>
-            <%= OpenProject::TextFormatting::Renderer.format_text(Setting.localized_emails_footer) %>
-          </td>
-        </tr>
-      </table>
+  <body>
+    <div class="container">
+      <div class="header">
+        <%= image_tag(attachments['aoz_logo.png'].url, alt: 'AlphaOmegaZed', class:"logo") %>
+
+        <div class="system-title">
+          Project Management
+        </div>
+      </div>
+
+      <div class="content">
+        <% if title %>
+          <h2 class="title"><%= title %></h2>
+        <% end %>
+
+        <%= yield %>
+
+        <div class="footer-note">
+          Αυτό είναι ένα αυτοματοποιημένο μήνυμα. Παρακαλούμε μην απαντήσετε σε αυτό το μήνυμα ηλεκτρονικού ταχυδρομείου.
+        </div>
+      </div>
+
+      <!-- <div class="copyright">
+        © Alpha Omega Zed Project Management
+      </div> -->
+    </div>
   </body>
 </html>
