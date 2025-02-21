@@ -41,7 +41,7 @@ class CostQuery::PDF::TimesheetGenerator
   end
 
   def cover_page_title
-    "OpenProject"
+    "AOZ Project Management"
   end
 
   def cover_page_heading

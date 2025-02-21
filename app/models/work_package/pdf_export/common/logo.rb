@@ -35,7 +35,7 @@ module WorkPackage::PDFExport::Common::Logo
   end
 
   def logo_image_filename
-    custom_logo_image_filename || Rails.root.join("app/assets/images/aoz_logo.png")
+    custom_logo_image_filename || Rails.root.join("app/assets/images/aoz_logo_black.png")
   end
 
   def custom_logo_image_filename

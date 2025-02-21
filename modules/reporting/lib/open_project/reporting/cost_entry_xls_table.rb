@@ -30,7 +30,7 @@ class OpenProject::Reporting::CostEntryXlsTable < OpenProject::XlsExport::XlsVie
     build_header
     format_columns
     build_cost_rows
-    build_footer
+    # build_footer
 
     spreadsheet
   end
@@ -83,13 +83,13 @@ class OpenProject::Reporting::CostEntryXlsTable < OpenProject::XlsExport::XlsVie
 
     cost_main_columns(result)
       .concat(cost_fields_columns(result))
-      .push(
+    .push(
 
-        show_result(result, current_cost_type_id), # units
-        cost_type_label(current_cost_type_id, @cost_type), # cost type
-        show_result(result, 0) # costs/currency
+      show_result(result, current_cost_type_id) # units
+      #   cost_type_label(current_cost_type_id, @cost_type), # cost type
+      #   show_result(result, 0) # costs/currency
 
-      )
+    )
   end
 
   def build_footer
@@ -120,8 +120,9 @@ class OpenProject::Reporting::CostEntryXlsTable < OpenProject::XlsExport::XlsVie
 
   def headers
     main_headers
-      .concat(cost_entry_attributes.map { |field| label_for(field) })
-      .push(CostEntry.human_attribute_name(:units), CostType.model_name.human, CostEntry.human_attribute_name(:costs))
+    .concat(cost_entry_attributes.map { |field| label_for(field) })
+    .push(CostEntry.human_attribute_name(:units), "", "")
+    # .push(CostEntry.human_attribute_name(:units), CostType.model_name.human, CostEntry.human_attribute_name(:costs))
   end
 
   def cost_entry_attributes

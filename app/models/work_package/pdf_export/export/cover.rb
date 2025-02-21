@@ -195,10 +195,10 @@ module WorkPackage::PDFExport::Export::Cover
   def write_background_image
     half = pdf.bounds.height / 2
     height = half
-    pdf.canvas do
-      image_obj, image_info, image_opts, height = cover_background_image
-      pdf.embed_image image_obj, image_info, image_opts
-    end
+    # pdf.canvas do
+    #   image_obj, image_info, image_opts, height = cover_background_image
+    #   pdf.embed_image image_obj, image_info, image_opts
+    # end
     height.clamp(half, pdf.bounds.height) - styles.cover_hero_padding[:top_padding]
   end
 end
