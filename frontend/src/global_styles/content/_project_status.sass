@@ -7,6 +7,7 @@ $project-status_discontinued: var(--fgColor-attention, var(--color-attention-fg)
 $project-status_not-started: var(--fgColor-accent, var(--fgColor-accent))
 $project-status_finished: var(--fgColor-done, var(--color-done-fg))
 $project-status-background-color: RGBA(var(--fgColor-subtle, var(--color-subtle-fg)), 0.3)
+$project-status_customprojectstatus: rgb(167, 207, 22)
 
 // Project status widget
 .ng-select
@@ -59,7 +60,9 @@ $project-status-background-color: RGBA(var(--fgColor-subtle, var(--color-subtle-
   &.-discontinued
     border-color: $project-status_discontinued
     background-color: $project-status-background-color
-
+  &.-customprojectstatus
+    border-color: $project-status_customprojectstatus
+    background-color: $project-status-background-color
   &.-inline
     height: 24px
     width: 24px
@@ -94,6 +97,8 @@ $project-status-background-color: RGBA(var(--fgColor-subtle, var(--color-subtle-
     color: $project-status_finished
   &.-discontinued
     color: $project-status_discontinued
+  &.-customprojectstatus
+      color: $project-status_customprojectstatus
 
 .project-status--pulldown-icon
   font-size: 10px

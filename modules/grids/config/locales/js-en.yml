@@ -36,6 +36,8 @@ en:
           not_set: 'Not set'
           finished: 'Finished'
           discontinued: 'Discontinued'
+          customprojectstatus: 'customprojectstatus'
+
         subprojects:
           title: 'Subprojects'
           no_results: 'No subprojects.'

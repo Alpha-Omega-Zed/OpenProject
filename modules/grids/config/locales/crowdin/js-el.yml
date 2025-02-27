@@ -36,6 +36,8 @@ el:
           not_set: 'Μη ορισμένο'
           finished: 'Ολοκληρωμένο'
           discontinued: 'Discontinued'
+          customprojectstatus: 'customprojectstatus'
+
         subprojects:
           title: 'Υποέργα'
           no_results: 'Δεν υπάρχουν υποέργα.'

@@ -871,6 +871,7 @@ el:
           off_track: "Eκτός πορείας"
           finished: "Ολοκληρωμένο"
           discontinued: "Discontinued"
+          customprojectstatus: 'customprojectstatus'
         templated: "Πρότυπο έργο"
         templated_value:
           true: "marked as template"

@@ -209,7 +209,9 @@ class Project < ApplicationRecord
     off_track: 2,
     not_started: 3,
     finished: 4,
-    discontinued: 5
+    discontinued: 5,
+    customprojectstatus: 6
+
   }
 
   def visible?(user = User.current)

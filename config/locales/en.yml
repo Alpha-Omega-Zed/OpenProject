@@ -954,6 +954,7 @@ en:
           off_track: "Off track"
           finished: "Finished"
           discontinued: "Discontinued"
+          customprojectstatus: "customprojectstatus"
         templated: "Template project"
         templated_value:
           true: "marked as template"
