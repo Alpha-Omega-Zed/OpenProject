@@ -33,16 +33,16 @@ class CostQuery::ScheduleExportService
     self.user = user
   end
 
-  def call(format:, query_id:, query_name:, filter_params:, project:, cost_types:)
+  def call(format:, query_id:, query_name:, filter_params:, project:, cost_types:, html_table:)
     export_storage = ::CostQuery::Export.create
-    job = schedule_export(format, export_storage, query_id, query_name, filter_params, project, cost_types)
+    job = schedule_export(format, export_storage, query_id, query_name, filter_params, project, cost_types, html_table)
 
     ServiceResult.success result: job.job_id
   end
 
   private
 
-  def schedule_export(format, export_storage, query_id, query_name, filter_params, project, cost_types)
+  def schedule_export(format, export_storage, query_id, query_name, filter_params, project, cost_types, html_table)
     job = format == :pdf ? ::CostQuery::PDF::ExportTimesheetJob : ::CostQuery::XLS::ExportJob
     job.perform_later(export: export_storage,
                       user:,
@@ -51,6 +51,7 @@ class CostQuery::ScheduleExportService
                       query_name:,
                       query: filter_params,
                       project:,
-                      cost_types:)
+                      cost_types:,
+                      html_table:)
   end
 end

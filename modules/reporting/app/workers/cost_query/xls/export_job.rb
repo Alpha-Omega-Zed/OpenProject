@@ -11,6 +11,10 @@ class CostQuery::XLS::ExportJob < Exports::ExportJob
     options[:cost_types]
   end
 
+  def html_table
+    options[:html_table]
+  end
+
   def title
     I18n.t("export.cost_reports.title")
   end
@@ -24,19 +28,30 @@ class CostQuery::XLS::ExportJob < Exports::ExportJob
 
   def export!
     # Build an xls file from a cost report.
-    # We only support extracting a simple xls table, so grouping is ignored.
     handle_export_result(export, xls_report_result)
   end
 
   def xls_report_result
-    params = { query:, project:, cost_types: }
-    content = ::OpenProject::Reporting::CostEntryXlsTable.generate(params).xls
+    if html_table.include?("class=\"generic-table--")
+      params = { query:, project:, cost_types: }
+      content = ::OpenProject::Reporting::CostEntryXlsTable.generate(params).xls
+
+    else
+      content, python_error, status = Open3.capture3("python3 modules/reporting/app/workers/cost_query/xls/generateCustomXLS.py",
+                                                     stdin_data: html_table)
+
+      unless status.success?
+        raise "Python script failed with error: #{python_error}"
+      end
+    end
     time = Time.current.strftime("%Y-%m-%d-T-%H-%M-%S")
     export_title = "cost-report-#{time}.xls"
 
-    ::Exports::Result.new(format: :xls,
-                          title: export_title,
-                          mime_type: "application/vnd.ms-excel",
-                          content:)
+    ::Exports::Result.new(
+      format: :xls,
+      title: export_title,
+      mime_type: "application/vnd.ms-excel",
+      content:
+    )
   end
 end

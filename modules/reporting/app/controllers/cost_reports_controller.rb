@@ -76,12 +76,13 @@ class CostReportsController < ApplicationController
 
   def index
     table
+    html_table = render_widget(Widget::Table, @query)
     return if performed?
 
     respond_to do |format|
       format.html { render_html }
-      format.xls { export(:xls) }
-      format.pdf { export(:pdf) }
+      format.xls { export(:xls, html_table) }
+      format.pdf { export(:pdf, html_table) }
     end
   end
 
@@ -92,7 +93,7 @@ class CostReportsController < ApplicationController
     render locals: { menu_name: project_or_global_menu }
   end
 
-  def export(format)
+  def export(format, html_table)
     job_id = ::CostQuery::ScheduleExportService
                .new(user: current_user)
                .call(
@@ -101,7 +102,8 @@ class CostReportsController < ApplicationController
                  query_name: @query.name,
                  filter_params: filter_params,
                  project: @project,
-                 cost_types: @cost_types
+                 cost_types: @cost_types,
+                 html_table:
                ).result
 
     if request.headers["Accept"]&.include?("application/json")
