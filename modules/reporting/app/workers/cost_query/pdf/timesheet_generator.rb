@@ -41,7 +41,7 @@ class CostQuery::PDF::TimesheetGenerator
   end
 
   def cover_page_title
-    "AOZ Project Management"
+    "Plannerus"
   end
 
   def cover_page_heading
