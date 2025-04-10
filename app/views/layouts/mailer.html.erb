@@ -50,31 +50,30 @@ See COPYRIGHT and LICENSE files for more details.
         }
       }
 
-      .container {
-        text-align: center;
-        background-color: #f5f5f5;
-        color: white;
-        padding-bottom: 20px;
+       h1, h2, h3 { font-family: "Trebuchet MS", Verdana, sans-serif; margin: 0px; }
+      h1 { font-size: 1.2em; }
+      h2, h3 { font-size: 1.1em; }
+      h2.emailTitle { color: #1a67a3; font-size: 2em; }
+      a, a:link, a:visited { color: #2A5685;}
+      a:hover, a:active { color: #c61a1a; }
+      a.op-uc-link_permalink { display: none; }
+      hr {
+        width: 100%;
+        height: 1px;
+        background: #ccc;
+        border: 0;
       }
-
-      .header {
-        background-color: #003575;
-        padding: 10px 0px;
-        font-size: 1.25rem;
-        display: inline-block;
-        align-items: center;
-		    width:100%
+      blockquote {
+        border-left: 3px solid #E0E0E0;
+        font-style: italic;
+        margin-left: 2.4em;
+        padding-left: 0.6em;
       }
-
-      .content {
-        text-align: left;
-        background-color: #ffffff;
-        border-radius: 10px;
-        margin: 20px auto;
-        max-width: 650px;
-        border: 1px solid #f0f0f0;
-        padding: 20px;
-        color: #303030;
+      pre {
+        white-space: normal;
+      }
+      img {
+        width: 100%;
       }
 
       .footer {
@@ -113,22 +112,13 @@ See COPYRIGHT and LICENSE files for more details.
 
       }
 
-      .system-title {
-        text-align: center;
-        color: #ffffff;
-        vertical-align: middle;
-
-      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <%= image_tag(attachments['plannerus-logo2.png'].url, alt: 'Plannerus', class:"logo") %>
+        <%= image_tag(attachments['logo.svg'].url, alt: 'Plannerus', class:"logo") %>
 
-        <div class="system-title">
-          Plannerus
-        </div>
       </div>
 
       <div class="content">

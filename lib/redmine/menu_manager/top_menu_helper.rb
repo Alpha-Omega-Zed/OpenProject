@@ -51,10 +51,6 @@ module Redmine::MenuManager::TopMenuHelper
                      configurable_home_url,
                      class: "op-logo--link #{mode_class}")
 
-      title = link_to("Plannerus",
-                      configurable_home_url,
-                      class: "system-title")
-
       link + title
     end
   end

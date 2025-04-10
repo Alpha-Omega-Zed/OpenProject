@@ -60,9 +60,7 @@ class ApplicationMailer < ActionMailer::Base
       end
     end
 
-    def protocol
-      Setting.protocol
-    end
+    delegate :protocol, to: :Setting
 
     def default_url_options
       options = super.merge(host:, protocol:)
@@ -122,7 +120,7 @@ class ApplicationMailer < ActionMailer::Base
   def mail(headers = {}, &block)
     block ||= method(:default_formats_for_setting)
     to = headers[:to]
-    attachments.inline["plannerus-logo2.png"] = Rails.root.join("app/assets/images/plannerus-logo2.png").read
+    attachments.inline["logo.svg"] = Rails.root.join("app/assets/images/logo.svg").read
 
     if to
       raise ArgumentError, "Recipient needs to be instance of User" unless to.is_a?(User)

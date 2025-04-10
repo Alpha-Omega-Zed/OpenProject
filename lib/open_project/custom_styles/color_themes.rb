@@ -64,7 +64,7 @@ module OpenProject::CustomStyles
           "main-menu-bg-selected-background" => "#A9A9A9",
           "main-menu-bg-hover-background" => "#FFFFFF"
         },
-        logo: "plannerus-logo2.png"
+        logo: "logo.svg"
       },
       {
         theme: "OpenProject Navy Blue",

@@ -32,17 +32,17 @@ See COPYRIGHT and LICENSE files for more details.
   isRu = I18n.locale == :ru
 
   logo_url = if isRu
-               asset_path("plannerus-logo2.png")
+               asset_path("logo.svg")
              else
-               asset_path("plannerus-logo2.png")
+               asset_path("logo.svg")
              end
   high_contrast_logo_url = if isRu
-                             asset_path("plannerus-logo2.png")
+                             asset_path("logo.svg")
                            else
-                             asset_path("plannerus-logo2.png")
+                             asset_path("logo.svg")
                            end
 
-  high_contrast_bim_logo_url = asset_path("bim/logo_openproject_bim_big_coloured.png")
+  high_contrast_bim_logo_url = asset_path("logo.svg")
 
   if apply_custom_styles?
     if CustomStyle.current.logo.present?
@@ -51,8 +51,8 @@ See COPYRIGHT and LICENSE files for more details.
       logo_url = asset_path(CustomStyle.current.theme_logo)
     end
     
-    if isRu && logo_url == asset_path("plannerus-logo2.png")
-      logo_url = asset_path("plannerus-logo2.png")
+    if isRu && logo_url == asset_path("logo.svg")
+      logo_url = asset_path("logo.svg")
     end
   end
   %>

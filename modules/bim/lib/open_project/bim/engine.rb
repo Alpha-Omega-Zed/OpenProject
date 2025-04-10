@@ -112,7 +112,7 @@ module OpenProject::Bim
 
     class_inflection_override("v2_1" => "V2_1")
 
-    assets %w(bim/logo_openproject_bim_big.png bim/logo_openproject_bim_big_coloured.png)
+    assets %w(logo.svg)
 
     patches %i[Attachment WorkPackage Type Journal RootSeeder Project FogFileUploader]
 
