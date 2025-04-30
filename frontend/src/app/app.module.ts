@@ -235,6 +235,7 @@ import { CurrentProjectService } from 'core-app/core/current-project/current-pro
 import {
   TimeEntriesWorkPackageAutocompleterComponent,
 } from 'core-app/shared/components/autocompleter/time-entries-work-package-autocompleter/time-entries-work-package-autocompleter.component';
+import { WpEnhanceTextButtonComponent } from 'core-app/features/work-packages/components/wp-buttons/wp-enhance-text-button/wp-enhance-text-button.component'
 
 export function initializeServices(injector:Injector) {
   return () => {
@@ -481,5 +482,6 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-global-search-tabs', GlobalSearchTabsComponent, { injector });
     registerCustomElement('opce-zen-mode-toggle-button', ZenModeButtonComponent, { injector });
     registerCustomElement('opce-colors-autocompleter', ColorsAutocompleterComponent, { injector });
+    registerCustomElement('opce-enhance-text-button', WpEnhanceTextButtonComponent, { injector });  // AI Enhancer addon
   }
 }

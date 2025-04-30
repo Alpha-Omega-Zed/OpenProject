@@ -1,0 +1,38 @@
+// Define colors for the button
+$purple: #063673  //original: #6c3be7
+$blue: #8140b1    //original: #4e8bf2
+$purple-blue-gradient: linear-gradient(45deg, $purple, $blue)
+
+// Basic button styling
+.wp-enhance-button
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  background: $purple-blue-gradient
+  border: none
+  border-radius: 5px
+  padding: 8px 14px
+  color: #fff
+  font-size: 16px
+  font-weight: 600
+  cursor: pointer
+  transition: background 0.3s ease, transform 0.2s ease
+
+  // Icon styling
+  i
+    margin-right: 8px // Space between icon and text
+    font-size: 18px // Icon size
+
+  // Hover effect for the button
+  &:hover
+    background: $blue
+    transform: translateY(-2px) // Slight lift effect
+
+  // Active state (when clicked)
+  &:active
+    transform: translateY(1px) // Slight press effect
+
+  // Focus state for accessibility
+  &:focus
+    outline: none
+    box-shadow: 0 0 0 3px rgba($purple, 0.5)
