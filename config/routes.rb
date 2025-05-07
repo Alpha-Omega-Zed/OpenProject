@@ -841,4 +841,10 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
     mount GoodJob::Engine => "good_job"
   end
+
+  scope controller: "ai_services" do
+    post 'ai_services/enhance', action: 'enhance'
+    post 'ai_services/generate_subtasks', action: 'generate_subtasks'
+  end
+  
 end

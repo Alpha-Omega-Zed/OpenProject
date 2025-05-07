@@ -1,0 +1,74 @@
+.ai-modal-backdrop
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  background-color: rgba(0, 0, 0, 0.4)
+  z-index: 1000
+
+.ai-suggestion-modal
+  position: fixed
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  background-color: #fff
+  border-radius: 8px
+  width: 500px
+  max-width: 90%
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15)
+  z-index: 1001
+  display: flex
+  flex-direction: column
+  overflow: hidden
+  font-family: var(--font-family, 'Open Sans', sans-serif)
+
+.modal-header
+  padding: 1rem 1.5rem
+  background-color: #f7f7f7
+  border-bottom: 1px solid #ddd
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.modal-title
+  font-size: 1.25rem
+  font-weight: 600
+  margin: 0
+
+.icon-close
+  background: none
+  border: none
+  cursor: pointer
+  font-size: 1.2rem
+
+.modal-body
+  padding: 1.5rem
+  overflow-y: auto
+
+.ai-suggestions-list
+  list-style: none
+  padding: 0
+  margin: 0
+
+.ai-suggestion-box
+  padding: 1rem
+  margin-bottom: 0.75rem
+  background-color: #f9f9f9
+  border: 1px solid #ddd
+  border-radius: 6px
+  cursor: pointer
+  transition: background-color 0.2s ease, border-color 0.2s ease
+
+  &:hover
+    background-color: #f0f0f0
+    border-color: #bbb
+
+  .option-label
+    font-size: 0.85rem
+    color: #888
+    margin-bottom: 0.25rem
+
+  .ai-suggestion-item
+    font-size: 1rem
+    color: #333

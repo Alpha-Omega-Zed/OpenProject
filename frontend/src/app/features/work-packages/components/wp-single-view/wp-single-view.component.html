@@ -78,13 +78,16 @@
 
   <div class="attributes-group description-group">
     <div class="single-attribute work-packages--details--description">
-      <op-editable-attribute-field [fieldName]="'description'"
-                                   [resource]="workPackage"
-                                   [isDropTarget]="true"
-                                   [wrapperClasses]="'-no-label'">
-      </op-editable-attribute-field>
+      <opce-editor-enhancer>
+        <op-editable-attribute-field
+                                    [fieldName]="'description'"
+                                    [resource]="workPackage"
+                                    [isDropTarget]="true"
+                                    [wrapperClasses]="'-no-label'">
+        </op-editable-attribute-field>
+        <opce-enhance-text-button></opce-enhance-text-button>
+      </opce-editor-enhancer>
     </div>
-    <opce-enhance-text-button></opce-enhance-text-button>
   </div>
 
   <div

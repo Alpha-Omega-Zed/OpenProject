@@ -1,0 +1,21 @@
+<div class="ai-modal-backdrop"></div>
+
+<div class="modal-container ai-suggestion-modal">
+  <div class="modal-header">
+    <h3 class="modal-title">{{ modalTitle }}</h3>
+    <button class="icon icon-close" (click)="closeModal()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+    <ul class="ai-suggestions-list">
+      <li
+        *ngFor="let suggestion of suggestions; let i = index"
+        (click)="selectSuggestion(suggestion)"
+        class="ai-suggestion-box"
+      >
+        <div class="option-label">Option #{{ i + 1 }}:</div>
+        <div class="ai-suggestion-item">{{ suggestion }}</div>
+      </li>
+    </ul>
+  </div>
+</div>

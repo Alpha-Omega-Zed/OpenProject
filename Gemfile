@@ -408,3 +408,7 @@ end
 gem "openproject-octicons", "~>19.20.0 "
 gem "openproject-octicons_helper", "~>19.20.0 "
 gem "openproject-primer_view_components", "~>0.54.0"
+
+gem 'httparty', '~> 0.23.1'
+gem 'multi_xml', '~> 0.7.1'
+

@@ -236,6 +236,8 @@ import {
   TimeEntriesWorkPackageAutocompleterComponent,
 } from 'core-app/shared/components/autocompleter/time-entries-work-package-autocompleter/time-entries-work-package-autocompleter.component';
 import { WpEnhanceTextButtonComponent } from 'core-app/features/work-packages/components/wp-buttons/wp-enhance-text-button/wp-enhance-text-button.component'
+import { WpAiSuggestionModalModule } from 'core-app/features/work-packages/components/wp-ai-suggestion-modal/ai-suggestion-modal.module'
+import { OpceEditorEnhancerComponent } from 'core-app/features/work-packages/components/wp-editor-enhancer/opce-editor-enhancer.component'
 
 export function initializeServices(injector:Injector) {
   return () => {
@@ -351,6 +353,9 @@ export function initializeServices(injector:Injector) {
 
     // My account
     OpenProjectMyAccountModule,
+
+    // Ai suggestions modal
+    WpAiSuggestionModalModule,
   ],
   providers: [
     { provide: States, useValue: new States() },
@@ -483,5 +488,6 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-zen-mode-toggle-button', ZenModeButtonComponent, { injector });
     registerCustomElement('opce-colors-autocompleter', ColorsAutocompleterComponent, { injector });
     registerCustomElement('opce-enhance-text-button', WpEnhanceTextButtonComponent, { injector });  // AI Enhancer addon
+    registerCustomElement('opce-editor-enhancer', OpceEditorEnhancerComponent, { injector })        //
   }
 }
