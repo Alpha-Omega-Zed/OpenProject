@@ -30,14 +30,4 @@ export class WpAiSuggestionModalAugmentComponent {
         }
       }));
   }
-
-  // TODO: Injects content in the editor
-  private setContent(editor:any, content: string) {
-    console.log(`E: ${editor}, E1: ${editor?.editField}, E2: ${editor?.editField?.writeValue}`)
-    // if (editor?.editField?.writeValue) {
-    //   editor.editField.writeValue(`<p class="op-uc-p">${content}</p>`);
-    // } else {
-    //   console.warn('Editor writeValue method not available');
-    // }
-  }
 }

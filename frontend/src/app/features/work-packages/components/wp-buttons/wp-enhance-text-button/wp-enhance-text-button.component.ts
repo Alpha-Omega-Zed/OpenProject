@@ -12,8 +12,13 @@ import { ChangeDetectionStrategy, Input, Component, ElementRef, Output, EventEmi
 export class WpEnhanceTextButtonComponent {
   @Output() clicked = new EventEmitter<void>();
 
+  public loading = false; // Display loading indicator when enhancing
+
   onclick = () => {
-    console.log("Button clicked")
-    this.clicked.emit();
+    if(!this.loading){
+      console.log("Button clicked"); // Add spinner <i class="fa-solid fa-spinner"></i> when loading (in .html)
+      this.loading = true;
+      this.clicked.emit();
+    }
   }
 }

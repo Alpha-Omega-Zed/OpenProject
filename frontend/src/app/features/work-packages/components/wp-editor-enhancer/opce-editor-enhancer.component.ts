@@ -10,6 +10,7 @@ import { WpAiSuggestionModalAugmentComponent } from '../wp-ai-suggestion-modal/w
 import { WpEnhanceTextButtonComponent } from '../wp-buttons/wp-enhance-text-button/wp-enhance-text-button.component';
 import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openproject-fields.module';
 import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
+import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
 
 @Component({
   selector: 'opce-editor-enhancer',
@@ -29,6 +30,9 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     private aiModalAugment: WpAiSuggestionModalAugmentComponent,
   ) {}
 
+  private editorComponent: EditableAttributeFieldComponent
+  private buttonComponent: WpEnhanceTextButtonComponent
+
   ngAfterViewInit() {
     const hostEl = this.host.nativeElement;
 
@@ -42,18 +46,18 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     }
 
     // Grab the Angular component instances behind those elements:
-    const btnCmp    = (window as any).ng.getComponent(btnEl) as WpEnhanceTextButtonComponent;
-    const editorCmp = (window as any).ng.getComponent(editorEl) as EditableAttributeFieldComponent;
+    this.buttonComponent = (window as any).ng.getComponent(btnEl) as WpEnhanceTextButtonComponent;
+    this.editorComponent = (window as any).ng.getComponent(editorEl) as EditableAttributeFieldComponent;
 
-    console.log('button instance:', btnCmp);
-    console.log('editor instance:', editorCmp);
+    console.log('button instance:', this.buttonComponent);
+    console.log('editor instance:', this.editorComponent);
 
     // Subscribe to click
-    btnCmp.clicked.subscribe(() => this.enhanceDescription(editorCmp));
+    this.buttonComponent.clicked.subscribe(() => this.enhanceDescription());
   }
 
-  private enhanceDescription(editor: EditableAttributeFieldComponent) {
-    const raw  = this.getContent(editor);
+  private enhanceDescription() {
+    const raw  = this.getContent();
 
     if(!raw){
       console.log("No text found...")
@@ -70,26 +74,27 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
         console.log(`Improved text: ${r.improvedText}`)
         try { options = JSON.parse(r.improvedText); }
         catch { options = [r.improvedText]; }
-        this.aiModalAugment.spawnModal(options, this.setContent);
+        this.aiModalAugment.spawnModal(options, (content: string)=>this.optionSelected(content));
       });
   }
 
-  private getContent(editor: EditableAttributeFieldComponent): string | null {
-    // find the textarea id
-    // console.log("native element: "+editor.editContainer.nativeElement)
-    // const textarea = editor.editContainer.nativeElement.innerText
-    return "Empty for now..."
+  private getEditorComponent(editor: EditableAttributeFieldComponent): OpCkeditorComponent | undefined {
+    const textElement = editor.editContainer.nativeElement.querySelector('op-ckeditor')
+    const textComponent = (window as any).ng.getComponent(textElement) as OpCkeditorComponent
+    return textComponent
+  }
+
+  private getContent(): string | undefined {
+    return this.getEditorComponent(this.editorComponent)?.ckEditorInstance.getData({trim: false});
   }
   
-  private setContent(editor: EditableAttributeFieldComponent, content: string): void {
-    // const textarea = editor.editContainer.nativeElement.querySelector('textarea');
-    // const id = textarea?.id;
-    // if(!id)return; // Do nothing if there's no id
+  private optionSelected(selection: string): void {
+    this.setContent(selection)
+    this.buttonComponent.loading = false // Done loading
+  }
 
-    // const inst = (window as any).CKEDITOR?.instances[id];
-    // if (inst) {
-    //   inst.setData(content);
-    // }
+  private setContent(content: string): void {
+    this.getEditorComponent(this.editorComponent)?.ckEditorInstance.setData(content)
   }
 
   private stripHtml(html: string) {

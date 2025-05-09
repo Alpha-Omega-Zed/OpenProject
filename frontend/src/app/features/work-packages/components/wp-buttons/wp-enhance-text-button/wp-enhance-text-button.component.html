@@ -1,3 +1,10 @@
 <button class="wp-enhance-button" (click)="onclick()">
-    <i class="fa-solid fa-wand-magic-sparkles"></i> Enhance Description
+    <div *ngIf="loading">
+        <i  class="fa-solid fa-wand-magic-sparkles"></i> Enhance Description
+    </div>
+    <ng-template #elseBlock>
+        <ngx-spinner bdColor="rgba(7,1,1,0.95)" size="small" type="pacman">
+            <p style="color: white">Enhancing...</p>
+        </ngx-spinner>
+    </ng-template>
 </button>
