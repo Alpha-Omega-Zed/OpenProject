@@ -1,20 +1,24 @@
 // Define colors for the button
-$purple: #063673  //original: #6c3be7
-$blue: #8140b1    //original: #4e8bf2
-$purple-blue-gradient: linear-gradient(45deg, $purple, $blue)
+$blue: #063673  //original: #6c3be7
+$purple: #8140b1    //original: #4e8bf2
+$disabled-blue: #3b4b60
+$disabled-purple: #89699f
+$purple-blue-gradient: linear-gradient(45deg, $blue, $purple)
+$disabled-color: linear-gradient(45deg, $disabled-blue, $disabled-purple)  // Grey out the button
 
 // Basic button styling
-.wp-enhance-button
+.opce-enhance-button
   display: inline-flex
   align-items: center
   justify-content: center
   background: $purple-blue-gradient
   border: none
-  border-radius: 5px
+  border-radius: 2px
   padding: 8px 14px
   color: #fff
   font-size: 16px
-  font-weight: 600
+  font-weight: 500
+  height: 36px
   cursor: pointer
   transition: background 0.3s ease, transform 0.2s ease
 
@@ -35,4 +39,11 @@ $purple-blue-gradient: linear-gradient(45deg, $purple, $blue)
   // Focus state for accessibility
   &:focus
     outline: none
-    box-shadow: 0 0 0 3px rgba($purple, 0.5)
+    box-shadow: 0 0 0 1px rgba($purple, 0.5)
+
+  // Disabled or loading state (greys out the button)
+  &.loading
+    background: $disabled-color
+    cursor: not-allowed
+    opacity: 0.6
+    pointer-events: none

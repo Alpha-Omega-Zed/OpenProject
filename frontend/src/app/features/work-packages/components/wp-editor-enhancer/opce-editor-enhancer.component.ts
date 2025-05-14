@@ -11,13 +11,62 @@ import { WpEnhanceTextButtonComponent } from '../wp-buttons/wp-enhance-text-butt
 import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openproject-fields.module';
 import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
 import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
+import { WpEnhancementDropdownComponent } from '../wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
+import { of, catchError } from 'rxjs';
+
+// TODO: Redo doesn't work properly, shouldn't be a hard fix
+
+export class EditorSnapshot {
+  private history: string[] = [];
+  private index: number = -1;
+
+  public append(state: string){
+    if(state!=this.history[this.index]){
+      this.history = this.history.slice(0, ++this.index);
+      this.history.push(state);
+    }
+  }
+
+  public getAll(): string[]{
+    return this.history;
+  }
+
+  public take(): string|undefined{
+    if(this.hasHistory()){
+      return this.history[--this.index];
+    }
+
+    return undefined;
+  }
+
+  public next(): string|undefined{
+    if(this.hasFuture()){
+      return this.history[++this.index];
+    }
+
+    return undefined;
+  }
+
+  public hasHistory(): boolean{
+    return this.index>0 && this.history.length>0;
+  }
+
+  public hasFuture(): boolean{
+    return this.history.length>this.index+1 && this.history.length>0;
+  }
+
+  public isEmpty(): boolean{
+    return this.history.length == 0;
+  }
+}
 
 @Component({
   selector: 'opce-editor-enhancer',
   standalone: true,
   imports: [
     WpEnhanceTextButtonComponent,
-    OpenprojectFieldsModule
+    WpEnhancementDropdownComponent,
+    OpenprojectFieldsModule,
   ],
   template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,15 +79,18 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     private aiModalAugment: WpAiSuggestionModalAugmentComponent,
   ) {}
 
-  private editorComponent: EditableAttributeFieldComponent
-  private buttonComponent: WpEnhanceTextButtonComponent
+  private editorComponent   : EditableAttributeFieldComponent;
+  private buttonComponent   : WpEnhanceTextButtonComponent;
+  private dropdownComponent : WpEnhancementDropdownComponent;
+  private history           :EditorSnapshot = new EditorSnapshot();
 
   ngAfterViewInit() {
     const hostEl = this.host.nativeElement;
 
     // Find the two child elements in the light DOM:
-    const btnEl    = hostEl.querySelector('opce-enhance-text-button');
-    const editorEl = hostEl.querySelector('op-editable-attribute-field');
+    const btnEl      = hostEl.querySelector('opce-enhance-text-button');
+    const editorEl   = hostEl.querySelector('op-editable-attribute-field');
+    const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown') 
 
     if (!btnEl || !editorEl) {
       console.error('Could not find button or editor inside <opce-editor-enhancer>');
@@ -48,12 +100,16 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     // Grab the Angular component instances behind those elements:
     this.buttonComponent = (window as any).ng.getComponent(btnEl) as WpEnhanceTextButtonComponent;
     this.editorComponent = (window as any).ng.getComponent(editorEl) as EditableAttributeFieldComponent;
+    this.dropdownComponent = (window as any).ng.getComponent(dropdownEl) as WpEnhancementDropdownComponent;
 
     console.log('button instance:', this.buttonComponent);
     console.log('editor instance:', this.editorComponent);
+    console.log('dropdown instance:', this.dropdownComponent);
 
     // Subscribe to click
-    this.buttonComponent.clicked.subscribe(() => this.enhanceDescription());
+    this.buttonComponent?.clicked.subscribe(() => this.enhanceDescription());
+    this.dropdownComponent?.undo.subscribe(() => this.undoAction());
+    this.dropdownComponent?.redo.subscribe(() => this.redoAction());
   }
 
   private enhanceDescription() {
@@ -69,13 +125,44 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     console.log(`Text sent to 'ai': ${text}`)
 
     this.http.post<{improvedText: string}>('/ai_services/enhance', { text })
+    .pipe(
+      catchError((error)=>{
+        console.error("Enhance request failed", error)
+        this.buttonComponent.loading = false
+        return of({ improvedText: null });
+      })
+    )
       .subscribe(r => {
+        if(!r.improvedText){
+          console.error("Failed to connect to ai microservice")
+          this.buttonComponent.setLoading(false) // Done loading
+          return
+        }
+
         let options: string[];
         console.log(`Improved text: ${r.improvedText}`)
         try { options = JSON.parse(r.improvedText); }
         catch { options = [r.improvedText]; }
         this.aiModalAugment.spawnModal(options, (content: string)=>this.optionSelected(content));
       });
+  }
+
+  private undoAction(){
+    const raw  = this.getContent();
+
+    const state = this.history.take();
+    console.log("Undoing, new text: "+state);
+    if(state){
+      this.setContent(state);
+    }
+  }
+
+  private redoAction(){
+    const state = this.history.next();
+    console.log("Redoing, new text: "+state)
+    if(state){
+      this.setContent(state);
+    }
   }
 
   private getEditorComponent(editor: EditableAttributeFieldComponent): OpCkeditorComponent | undefined {
@@ -88,9 +175,18 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     return this.getEditorComponent(this.editorComponent)?.ckEditorInstance.getData({trim: false});
   }
   
-  private optionSelected(selection: string): void {
-    this.setContent(selection)
-    this.buttonComponent.loading = false // Done loading
+  private optionSelected(selection: string | null): void {
+    if(selection){
+      const raw  = this.getContent();
+      if(raw){
+        this.history.append(raw); // Record history before modification if 
+        console.log("History is now: "+this.history.getAll())
+      }
+      this.setContent(selection)
+
+      this.history.append(selection);
+    }
+    this.buttonComponent.setLoading(false) // Done loading
   }
 
   private setContent(content: string): void {

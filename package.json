@@ -17,6 +17,6 @@
     "@redocly/openapi-cli": "^1.0.0-beta.80"
   },
   "dependencies": {
-    "ngx-spinner": "^19.0.0"
+    "@openproject/octicons-angular": "^19.25.0"
   }
 }

@@ -1,6 +1,6 @@
-<button class="wp-enhance-button" (click)="onclick()">
+<button class="opce-enhance-button" (click)="onclick()"  [ngClass]="{'loading': loading}">
     <ng-container *ngIf="!loading; else loadingBlock">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Enhance Description
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Enhance
     </ng-container>
     <ng-template #loadingBlock>
         <i class="fa-solid fa-spinner fa-spin"></i>Enhancing...

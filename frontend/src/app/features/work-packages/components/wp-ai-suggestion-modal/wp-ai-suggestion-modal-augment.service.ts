@@ -18,16 +18,8 @@ export class WpAiSuggestionModalAugmentComponent {
     ).subscribe((modal) => modal
       .closingEvent
       .subscribe((instance:WpAiSuggestionModalComponent) => {
-        // Just reload the page for now if we saved anything
-        // if (instance.data) {
-        //   window.location.reload();
-        // }
-
         console.log("User picked option "+instance.data)
-
-        if(instance.data){
-          updateSelection(instance.data)
-        }
+        updateSelection(instance.data)
       }));
   }
 }

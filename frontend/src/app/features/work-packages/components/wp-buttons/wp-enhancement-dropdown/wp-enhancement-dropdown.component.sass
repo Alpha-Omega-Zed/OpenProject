@@ -1,0 +1,93 @@
+// Define colors
+$blue: #063673
+$purple: #8140b1
+$hover-gradient: linear-gradient(45deg, lighten($blue, 10%), lighten($purple, 10%))
+$active-bg: darken($purple, 5%)
+$button-gradient: linear-gradient(45deg, $blue, $purple)
+$text-color: #fff
+$menu-bg: #f9f9ff
+$separator: rgba(130, 100, 160, 0.15)
+
+.enhancement-dropdown-container
+  position: relative
+  display: inline-flex
+  align-items: center
+
+  .wp-enhancement-dropdown
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    background: $button-gradient
+    border: none
+    border-radius: 2px
+    padding: 10px 10px
+    color: $text-color
+    font-size: 16px
+    font-weight: 600
+    cursor: pointer
+    transition: background 0.3s ease, transform 0.2s ease
+    margin-left: 3px
+    height: 36px
+
+    i
+      font-size: 18px
+      vertical-align: middle
+      display: inline-block
+
+    &:hover
+      background: lighten($blue, 5%)
+      transform: translateY(-2px)
+
+    &:active
+      transform: translateY(1px)
+
+    &:focus
+      outline: none
+      box-shadow: 0 0 0 1px rgba($purple, 0.3)
+
+  .dropdown-menu
+    position: absolute
+    left: 100%
+    top: 0
+    margin-left: 12px
+    background: $menu-bg
+    border: 1px solid $separator
+    border-radius: 2px
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12)
+    z-index: 10
+    width: 170px
+
+    ul
+      list-style: none
+      margin: 0
+
+      li
+        margin: 0
+        padding: 0
+
+        opce-enhancement-option-button
+          display: flex
+          align-items: center
+          justify-content: flex-start
+          width: 100%
+          padding: 10px 16px
+          background: none
+          border: none
+          font-size: 14px
+          color: $blue
+          text-align: left
+          cursor: pointer
+          transition: background 0.25s ease, color 0.25s ease
+
+          i
+            margin-right: 8px
+            font-size: 16px
+            color: inherit
+
+          &:hover
+            background: $hover-gradient
+            color: $text-color
+
+          &:active
+            background: $active-bg
+            color: $text-color
