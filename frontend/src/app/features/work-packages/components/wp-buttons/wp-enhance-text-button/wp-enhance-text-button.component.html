@@ -1,8 +1,8 @@
 <div class="opce-enhance-button" (click)="onclick()"  [ngClass]="{'loading': loading}">
     <ng-container *ngIf="!loading; else loadingBlock">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Enhance
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
     </ng-container>
     <ng-template #loadingBlock>
-        <i class="fa-solid fa-spinner fa-spin"></i>Enhancing...
+        <i class="fa-solid fa-spinner fa-spin"></i>
     </ng-template>
 </div>

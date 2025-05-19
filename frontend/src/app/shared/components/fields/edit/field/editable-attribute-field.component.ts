@@ -63,6 +63,7 @@ import { SchemaResource } from 'core-app/features/hal/resources/schema-resource'
   selector: 'op-editable-attribute-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './editable-attribute-field.component.html',
+  styleUrls: ['./editable-attribute-field.component.sass'],
 })
 export class EditableAttributeFieldComponent extends UntilDestroyedMixin implements OnInit, OnDestroy {
   @Input() public fieldName:string;
@@ -160,6 +161,18 @@ export class EditableAttributeFieldComponent extends UntilDestroyedMixin impleme
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     return !!(this.editForm && this.schema.isAttributeEditable(this.fieldName));
   }
+  
+  public get isTextInputField(): boolean {
+    if (!this.editForm || !this.schema.isAttributeEditable(this.fieldName)) {
+      return false;
+    }
+  
+    const schemaField = this.schema[this.fieldName];
+    const textTypes = ['String', 'Text', 'Formattable']; // Add others as needed
+  
+    return textTypes.includes(schemaField?.type || '');
+  }
+  
 
   public activateIfEditable(event:MouseEvent|KeyboardEvent):boolean {
     // Ignore selections

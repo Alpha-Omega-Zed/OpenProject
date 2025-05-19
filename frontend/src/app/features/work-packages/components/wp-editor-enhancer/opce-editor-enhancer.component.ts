@@ -79,7 +79,7 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     private aiModalAugment: WpAiSuggestionModalAugmentComponent,
   ) {}
 
-  private editorComponent   : EditableAttributeFieldComponent;
+  private editorElement  : HTMLElement | null = null;
   private buttonComponent   : WpEnhanceTextButtonComponent;
   private dropdownComponent : WpEnhancementDropdownComponent;
   private history           :EditorSnapshot = new EditorSnapshot();
@@ -87,26 +87,26 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
   ngAfterViewInit() {
     const hostEl = this.host.nativeElement;
 
-    // Find the two child elements in the light DOM:
+    // Light DOM child elements
     const btnEl      = hostEl.querySelector('opce-enhance-button');
-    const editorEl   = hostEl.querySelector('op-editable-attribute-field');
-    const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown') 
+    const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown'); 
 
-    if (!btnEl || !editorEl) {
+    this.editorElement   = hostEl.querySelector('.editor-container');
+
+    if (!btnEl || !this.editorElement) {
       console.error('Could not find button or editor inside <opce-editor-enhancer>');
       return;
     }
 
-    // Grab the Angular component instances behind those elements:
+    // Instances behind those elements
     this.buttonComponent = (window as any).ng.getComponent(btnEl) as WpEnhanceTextButtonComponent;
-    this.editorComponent = (window as any).ng.getComponent(editorEl) as EditableAttributeFieldComponent;
     this.dropdownComponent = (window as any).ng.getComponent(dropdownEl) as WpEnhancementDropdownComponent;
 
     console.log('button instance:', this.buttonComponent);
-    console.log('editor instance:', this.editorComponent);
+    console.log('editor html element:', this.editorElement);
     console.log('dropdown instance:', this.dropdownComponent);
 
-    // Subscribe to click
+    // Subscribe to click events
     this.buttonComponent?.clicked.subscribe(() => this.enhanceDescription());
     this.dropdownComponent?.undo.subscribe(() => this.undoAction());
     this.dropdownComponent?.redo.subscribe(() => this.redoAction());
@@ -165,18 +165,35 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     }
   }
 
-  private getEditorComponent(editor: EditableAttributeFieldComponent): OpCkeditorComponent | undefined {
-    const textElement = editor.editContainer.nativeElement.querySelector('op-ckeditor')
-    const textComponent = (window as any).ng.getComponent(textElement) as OpCkeditorComponent
-    return textComponent
+  private getEditorComponent(): OpCkeditorComponent | undefined {
+    if(!this.editorElement)
+      return undefined;
+
+    const textElement = this.editorElement.querySelector('op-ckeditor')
+    return textElement?(window as any).ng.getComponent(textElement) as OpCkeditorComponent : undefined;
+  }
+
+  private getPlainText(): string | undefined {
+    const el = this.editorElement?.querySelector('input, textarea, [contenteditable="true"]') || undefined;
+
+    if(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement){
+      return el.value
+    } else {
+      return el?.textContent?.trim()
+    }
+  }
+
+  public get isInline(): boolean {
+    return this.getEditorComponent()!=undefined
   }
 
   private getContent(): string | undefined {
-    const raw = this.getEditorComponent(this.editorComponent)?.ckEditorInstance.getData({trim: false})
+    const raw = this.getEditorComponent()?.ckEditorInstance.getData({trim: false})
 
     // Replace escaped characters to ensure proper change detection
     let parser = new DOMParser();
-    let decoded = raw?parser.parseFromString(raw, "text/html")?.body?.textContent : undefined;
+    let decoded = raw?parser.parseFromString(raw, "text/html")?.body?.textContent : this.getPlainText();
+
     return decoded || undefined;
   }
   
@@ -195,7 +212,7 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
   }
 
   private setContent(content: string): void {
-    this.getEditorComponent(this.editorComponent)?.ckEditorInstance.setData(content)
+    this.getEditorComponent()?.ckEditorInstance.setData(content)
   }
 
   private stripHtml(html: string) {

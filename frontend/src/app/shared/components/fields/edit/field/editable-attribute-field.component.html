@@ -7,10 +7,22 @@
   ]"
   (dragover)="startDragActivation($event)"
 >
-  <div
-    #editContainer
-    [hidden]="!active"
-  ></div>
+  <opce-editor-enhancer #editorEnhancer>
+    <div
+      #editContainer
+      class="editor-container"
+      [hidden]="!active"
+    ></div>
+
+    <div 
+      [class.inline]="editorEnhancer.isInline"
+      class="ai-enhancement-gizmo"
+      [hidden]="!active || !isTextInputField"
+    >
+      <opce-enhance-button></opce-enhance-button>
+      <opce-enhancement-dropdown></opce-enhancement-dropdown>
+    </div>
+</opce-editor-enhancer>
 
   <div
     (click)="activateIfEditable($event)"

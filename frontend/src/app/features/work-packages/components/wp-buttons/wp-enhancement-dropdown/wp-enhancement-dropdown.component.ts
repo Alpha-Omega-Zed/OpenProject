@@ -29,7 +29,6 @@ export class WpEnhancementDropdownComponent implements AfterViewInit {
   public toggled = false; // Toggles the dropdown
 
   ngAfterViewInit() {
-    console.log("Subscribing to "+this.undoButton+" and "+this.redoButton)
     this.undoButton?.trigger.subscribe(()=>{
       console.log("Emitting undo!")
       this.undo.emit();
