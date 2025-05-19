@@ -12,9 +12,8 @@ import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openp
 import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
 import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
 import { WpEnhancementDropdownComponent } from '../wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
+import { WpEnhancementOptionButtonComponent } from '../wp-buttons/wp-enhnancement-option-button/wp-enhancement-option-button.component';
 import { of, catchError } from 'rxjs';
-
-// TODO: Redo doesn't work properly, shouldn't be a hard fix
 
 export class EditorSnapshot {
   private history: string[] = [];
@@ -62,13 +61,14 @@ export class EditorSnapshot {
 
 @Component({
   selector: 'opce-editor-enhancer',
+  templateUrl: './opce-editor-enhancer.component.html',
   standalone: true,
   imports: [
     WpEnhanceTextButtonComponent,
     WpEnhancementDropdownComponent,
     OpenprojectFieldsModule,
+    WpEnhancementOptionButtonComponent,
   ],
-  template: `<ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
@@ -88,7 +88,7 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     const hostEl = this.host.nativeElement;
 
     // Find the two child elements in the light DOM:
-    const btnEl      = hostEl.querySelector('opce-enhance-text-button');
+    const btnEl      = hostEl.querySelector('opce-enhance-button');
     const editorEl   = hostEl.querySelector('op-editable-attribute-field');
     const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown') 
 
@@ -172,7 +172,12 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
   }
 
   private getContent(): string | undefined {
-    return this.getEditorComponent(this.editorComponent)?.ckEditorInstance.getData({trim: false});
+    const raw = this.getEditorComponent(this.editorComponent)?.ckEditorInstance.getData({trim: false})
+
+    // Replace escaped characters to ensure proper change detection
+    let parser = new DOMParser();
+    let decoded = raw?parser.parseFromString(raw, "text/html")?.body?.textContent : undefined;
+    return decoded || undefined;
   }
   
   private optionSelected(selection: string | null): void {

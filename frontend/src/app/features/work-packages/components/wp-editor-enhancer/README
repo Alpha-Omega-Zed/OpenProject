@@ -1,0 +1,19 @@
+(1) Find why buttons are duplicated when moving (enhance text & dropdown buttons) from single-view html to
+    a custom editor enhancer html. 
+
+(2) Try to hide buttons when the editor is inactive, for example when saving a project
+
+(3) Try integrating the editor in (all?) text fields: add a floating blip right after the user's caret in
+    any focused ckeditor instance, the user should be able to click on it, maybe a dropdown should open,
+    and allow the user to select one of: enhance text, undo, redo or generate subtasks (possibly also translate)
+
+(4) Add more options to the dropdown like translate or generate subtasks
+
+(5) Get started on documentation
+
+== UPDATED ==
+
+Last time you were working on the plugin for ckeditor with deepseek, but I'm not sure it's going the right way
+Either try to get that working (floating ui element in window), or come up with a simpler alternative
+
+Good luck.
