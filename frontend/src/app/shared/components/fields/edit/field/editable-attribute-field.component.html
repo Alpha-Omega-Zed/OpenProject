@@ -5,9 +5,11 @@
     active && '-active' || '',
     wrapperClasses || '-small'
   ]"
+  (focusin)="onFocusChange()"
+  (focusout)="onFocusChange()"
   (dragover)="startDragActivation($event)"
 >
-  <opce-editor-enhancer #editorEnhancer>
+  <opce-editor-enhancer [focusedEvent]="focused">
     <div
       #editContainer
       class="editor-container"
@@ -15,12 +17,16 @@
     ></div>
 
     <div 
-      [class.inline]="editorEnhancer.isInline"
+      [class.inline]="inline"
+      [class.forceOn]="forceAIGizmo"
       class="ai-enhancement-gizmo"
-      [hidden]="!active || !isTextInputField"
+      [hidden]="!active || !inFocus"
+      *ngIf="isTextInputField"
     >
       <opce-enhance-button></opce-enhance-button>
-      <opce-enhancement-dropdown></opce-enhancement-dropdown>
+      <opce-enhancement-dropdown
+        (toggleChanged)="onAiGizmoToggle($event)">
+      </opce-enhancement-dropdown>
     </div>
 </opce-editor-enhancer>
 

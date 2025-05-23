@@ -1,5 +1,5 @@
 <div #dropdown class="enhancement-dropdown-container">
-    <button class="wp-enhancement-dropdown" (click)="toggled = !toggled">
+    <button class="wp-enhancement-dropdown" (click)="setToggled(!toggled)">
         <i class="fa-solid fa-angle-down"></i>
     </button>
     <div class="dropdown-menu" [style.display]="toggled ? 'block' : 'none'">

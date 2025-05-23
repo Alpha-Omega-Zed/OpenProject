@@ -40,6 +40,7 @@ import {
   OnInit,
   Optional,
   ViewChild,
+  EventEmitter,
 } from '@angular/core';
 import { OPContextMenuService } from 'core-app/shared/components/op-context-menu/op-context-menu.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
@@ -88,6 +89,12 @@ export class EditableAttributeFieldComponent extends UntilDestroyedMixin impleme
 
   private $element:JQuery;
 
+  public inline               = false; // For the editor enhancer
+  public forceAIGizmo:boolean = false  // 
+  public inFocus              = false; //
+
+  public focused:EventEmitter<void>;
+
   public destroyed = false;
 
   constructor(
@@ -113,6 +120,9 @@ export class EditableAttributeFieldComponent extends UntilDestroyedMixin impleme
   }
 
   public ngOnInit():void {
+    this.focused = new EventEmitter<void>();
+    this.cdRef.detectChanges();
+    
     this.fieldRenderer = new DisplayFieldRenderer(this.injector, 'single-view', this.displayFieldOptions);
     this.$element = jQuery<HTMLElement>(this.elementRef.nativeElement);
 
@@ -129,6 +139,63 @@ export class EditableAttributeFieldComponent extends UntilDestroyedMixin impleme
         this.resource = resource;
         this.render();
       });
+  }
+
+  private logActiveElementDetails() {
+    const el = document.activeElement;
+    if (!el) {
+      console.log('No active element');
+      return;
+    }
+  
+    const tag = el.tagName.toLowerCase();
+    const id = el.id ? `#${el.id}` : '';
+    const classes = el.classList.length > 0 ? '.' + Array.from(el.classList).join('.') : '';
+    const text = (el.textContent || '').trim().slice(0, 30).replace(/\s+/g, ' ');
+    const attrs = Array.from(el.attributes)
+      .map(attr => `${attr.name}="${attr.value}"`)
+      .join(' ');
+  
+    console.log(`Focused Element: <${tag}${id}${classes}>`);
+    console.log(`Attributes: ${attrs}`);
+    if (text) console.log(`Text content (trimmed): "${text}"`);
+    console.log('Full element:', el);
+  }
+  
+  
+
+  public onFocusChange(){
+    // Defer to ensure document.activeElement is up-to-date
+    setTimeout(() => {
+      console.log("Focus changed!")
+      const inFocus = this.elementRef.nativeElement.contains(document.activeElement);
+      console.log(`focused?: ${inFocus}`)
+      this.logActiveElementDetails();
+
+      if(inFocus!=this.inFocus){
+        if(inFocus){
+          console.log("Firing focused event!")
+          this.focused.emit(); // Notify editor enhancer that we are focused
+        }
+        console.log(`Focus updated: [${inFocus}]`)
+        this.inFocus = inFocus;
+        this.inline = this.isContainerInline(); // Trigger update
+
+        // Explicitly trigger change detection
+        this.cdRef.detectChanges();
+      }
+    });
+  }
+
+  public onAiGizmoToggle(state: any): void {
+    console.log(`From A.F.: Dropdown toggled: ${state.detail}`);
+    this.forceAIGizmo = state.detail;
+  }
+
+  // If the container is an inline editor it won't contain a ck-editor element
+  private isContainerInline():boolean {
+    const inl = this.editContainer.nativeElement.querySelector('op-ckeditor') == null;
+    return inl;
   }
 
   // Open the field when its closed and relay drag & drop events to it.

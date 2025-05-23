@@ -20,7 +20,7 @@ $separator: rgba(130, 100, 160, 0.15)
     background: $button-gradient
     border: none
     border-radius: 1px 15px 15px 1px
-    padding: 10px 10px
+    padding: 8px 6px
     color: $text-color
     font-size: 16px
     font-weight: 600
@@ -46,16 +46,18 @@ $separator: rgba(130, 100, 160, 0.15)
       box-shadow: 0 0 0 1px rgba($purple, 0.3)
 
   .dropdown-menu
+    display: flex
+    align-items: center
+    justify-content: center
     position: absolute
-    left: 100%
-    top: 0
-    margin-left: 12px
+    left: -80px
+    top: calc(100% + 12px)
     background: $menu-bg
     border: 1px solid $separator
     border-radius: 2px
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12)
     z-index: 50
-    width: 170px
+    width: 100px
 
     ul
       list-style: none

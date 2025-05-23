@@ -3,7 +3,9 @@ import {
   Component,
   AfterViewInit,
   ElementRef,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Input,
+  EventEmitter,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WpAiSuggestionModalAugmentComponent } from '../wp-ai-suggestion-modal/wp-ai-suggestion-modal-augment.service';
@@ -62,6 +64,7 @@ export class EditorSnapshot {
 @Component({
   selector: 'opce-editor-enhancer',
   templateUrl: './opce-editor-enhancer.component.html',
+  styleUrls: ['./opce-editor-enhancer.component.sass'],
   standalone: true,
   imports: [
     WpEnhanceTextButtonComponent,
@@ -79,18 +82,38 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     private aiModalAugment: WpAiSuggestionModalAugmentComponent,
   ) {}
 
-  private editorElement  : HTMLElement | null = null;
+  private editorElement     : HTMLElement | null = null;
   private buttonComponent   : WpEnhanceTextButtonComponent;
   private dropdownComponent : WpEnhancementDropdownComponent;
-  private history           :EditorSnapshot = new EditorSnapshot();
+  private history           : EditorSnapshot = new EditorSnapshot();
 
-  ngAfterViewInit() {
-    const hostEl = this.host.nativeElement;
+  private _focusedEvent?: EventEmitter<null>;
 
-    // Light DOM child elements
+  @Input() set focusedEvent(event: EventEmitter<null> | undefined) {
+    if(event && !this._focusedEvent){
+      console.log("Setting focused event")
+      this._focusedEvent = event;
+      this._focusedEvent.subscribe(() =>this.initComponents());
+    }
+  }
+
+  get focusedEvent(): EventEmitter<null> | undefined {
+    return this._focusedEvent;
+  }
+
+  ngAfterViewInit(): void {
+    this.initComponents(); // Initialize components if not already done
+  }
+
+  private initComponents() {
+    if(this.buttonComponent && this.dropdownComponent && this.editorElement){
+      // All components already available, don't look for them again
+      return;
+    }
+
+    const hostEl = this.host.nativeElement; 
     const btnEl      = hostEl.querySelector('opce-enhance-button');
     const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown'); 
-
     this.editorElement   = hostEl.querySelector('.editor-container');
 
     if (!btnEl || !this.editorElement) {
@@ -103,8 +126,8 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     this.dropdownComponent = (window as any).ng.getComponent(dropdownEl) as WpEnhancementDropdownComponent;
 
     console.log('button instance:', this.buttonComponent);
-    console.log('editor html element:', this.editorElement);
     console.log('dropdown instance:', this.dropdownComponent);
+    console.log('editor html element:', this.editorElement);
 
     // Subscribe to click events
     this.buttonComponent?.clicked.subscribe(() => this.enhanceDescription());
@@ -183,12 +206,18 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     }
   }
 
-  public get isInline(): boolean {
-    return this.getEditorComponent()!=undefined
+  private setPlainText(text: string):void {
+    const el = this.editorElement?.querySelector('input, textarea, [contenteditable="true"]') || undefined;
+
+    if(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement){
+      el.value = text;
+    } else {
+      el && (el.textContent = text);
+    }
   }
 
   private getContent(): string | undefined {
-    const raw = this.getEditorComponent()?.ckEditorInstance.getData({trim: false})
+    const raw = this.getEditorComponent()?.ckEditorInstance?.getData({trim: false})
 
     // Replace escaped characters to ensure proper change detection
     let parser = new DOMParser();
@@ -212,7 +241,11 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
   }
 
   private setContent(content: string): void {
-    this.getEditorComponent()?.ckEditorInstance.setData(content)
+    const ckEditorInstance = this.getEditorComponent()?.ckEditorInstance;
+    if(ckEditorInstance)
+      ckEditorInstance.setData(content);
+    else 
+      this.setPlainText(content);
   }
 
   private stripHtml(html: string) {
