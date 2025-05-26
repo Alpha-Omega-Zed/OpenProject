@@ -5,14 +5,14 @@
     <div class="dropdown-menu" [style.display]="toggled ? 'block' : 'none'">
       <ul>
         <li>
-            <opce-enhancement-option-button #undo>
+            <button (click)="undo.emit()">
                 <i class="fa-solid fa-rotate-left"></i>Undo
-            </opce-enhancement-option-button>
+            </button>
         </li>
         <li>
-            <opce-enhancement-option-button #redo>
+            <button (click)="redo.emit()">
                 <i class="fa-solid fa-rotate-right"></i>Redo
-            </opce-enhancement-option-button>
+            </button>
         </li>
       </ul>
     </div>

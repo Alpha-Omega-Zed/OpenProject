@@ -239,7 +239,6 @@ import { WpEnhanceTextButtonComponent } from 'core-app/features/work-packages/co
 import { WpAiSuggestionModalModule } from 'core-app/features/work-packages/components/wp-ai-suggestion-modal/ai-suggestion-modal.module'
 import { OpceEditorEnhancerComponent } from 'core-app/features/work-packages/components/wp-editor-enhancer/opce-editor-enhancer.component'
 import { WpEnhancementDropdownComponent } from './features/work-packages/components/wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
-import { WpEnhancementOptionButtonComponent } from './features/work-packages/components/wp-buttons/wp-enhnancement-option-button/wp-enhancement-option-button.component';
 
 export function initializeServices(injector:Injector) {
   return () => {
@@ -489,9 +488,8 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-global-search-tabs', GlobalSearchTabsComponent, { injector });
     registerCustomElement('opce-zen-mode-toggle-button', ZenModeButtonComponent, { injector });
     registerCustomElement('opce-colors-autocompleter', ColorsAutocompleterComponent, { injector });
-    registerCustomElement('opce-enhance-button', WpEnhanceTextButtonComponent, { injector });            // AI Enhancer addon
-    registerCustomElement('opce-editor-enhancer', OpceEditorEnhancerComponent, { injector })                  //
-    registerCustomElement('opce-enhancement-option-button', WpEnhancementOptionButtonComponent, { injector }) //
+    registerCustomElement('opce-enhance-button', WpEnhanceTextButtonComponent, { injector });                // AI Enhancer addon
+    registerCustomElement('opce-editor-enhancer', OpceEditorEnhancerComponent, { injector })                 //
     registerCustomElement('opce-enhancement-dropdown', WpEnhancementDropdownComponent, { injector })         //
   }
 }

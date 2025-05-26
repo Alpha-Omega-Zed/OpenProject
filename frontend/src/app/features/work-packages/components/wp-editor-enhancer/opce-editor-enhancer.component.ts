@@ -14,7 +14,6 @@ import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openp
 import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
 import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
 import { WpEnhancementDropdownComponent } from '../wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
-import { WpEnhancementOptionButtonComponent } from '../wp-buttons/wp-enhnancement-option-button/wp-enhancement-option-button.component';
 import { of, catchError } from 'rxjs';
 
 export class EditorSnapshot {
@@ -70,7 +69,6 @@ export class EditorSnapshot {
     WpEnhanceTextButtonComponent,
     WpEnhancementDropdownComponent,
     OpenprojectFieldsModule,
-    WpEnhancementOptionButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -140,6 +138,7 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
 
     if(!raw){
       console.log("No text found...")
+      this.buttonComponent.setLoading(false); // Done loading
       return; // No retrievable content, just ignore for now
     }
     
@@ -211,8 +210,10 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
 
     if(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement){
       el.value = text;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
       el && (el.textContent = text);
+      el && el.dispatchEvent(new Event('input', { bubbles: true }));
     }
   }
 

@@ -4,46 +4,30 @@ import {
   EventEmitter,
   Output, 
   ViewChild,
-  AfterViewInit,
   ElementRef,
   HostListener,
   ChangeDetectorRef,
 } from '@angular/core';
-import { WpEnhancementOptionButtonComponent } from '../wp-enhnancement-option-button/wp-enhancement-option-button.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'opce-enhancement-dropdown',
   standalone: true,
-  imports: [WpEnhancementOptionButtonComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './wp-enhancement-dropdown.component.html',
   styleUrl: './wp-enhancement-dropdown.component.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WpEnhancementDropdownComponent implements AfterViewInit {
+export class WpEnhancementDropdownComponent {
   @Output() undo = new EventEmitter<void>();
   @Output() redo = new EventEmitter<void>();
   @Output() toggleChanged = new EventEmitter<boolean>();
 
   @ViewChild("dropdown", { static: true }) dropdownRef!: ElementRef;
-  @ViewChild("undo",     { static: true }) undoButton!: WpEnhancementOptionButtonComponent;
-  @ViewChild("redo",     { static: true }) redoButton!: WpEnhancementOptionButtonComponent;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   public toggled = false; // Toggles the dropdown
-
-  ngAfterViewInit() {
-    this.undoButton?.trigger.subscribe(()=>{
-      console.log("Emitting undo!")
-      this.undo.emit();
-    })
-
-    this.redoButton?.trigger.subscribe(()=>{
-      console.log("Emitting redo!")
-      this.redo.emit();
-    })
-  }
 
   public setToggled(state: boolean) {
     this.toggleChanged.emit(state);
