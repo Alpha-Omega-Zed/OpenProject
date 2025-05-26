@@ -1,6 +1,7 @@
 class AiServicesController < ApplicationController
 
   before_action :authorize_global, only: [:enhance]
+  before_action :authorize_global, only: [:translate]
   before_action :authorize_global, only: [:generate_subtasks]
 
   def enhance
@@ -29,6 +30,44 @@ class AiServicesController < ApplicationController
           render json: { improvedText: improved_text }
         else
           render json: { error: 'Improved text not found in the response' }, status: :unprocessable_entity
+        end
+      else
+        render json: { error: 'Failed to enhance text', details: response.body }, status: :bad_request
+      end
+    rescue StandardError => e
+      # Catch any other exceptions and log them
+      Rails.logger.error("Error calling external API: #{e.message}")
+      render json: { error: 'Error contacting the ai microservice' }, status: :internal_server_error
+    end
+  end
+
+  def translate
+    input = params[:text]
+    lang  = params[:lang]
+    
+    # Validate input
+    if input.blank?
+      render json: { error: 'Text input is required' }, status: :bad_request
+      return
+    end
+
+    begin
+      # Make the HTTP request to the ai microservice
+      response = HTTParty.post(
+        "http://aitextfeature-backend:5000/api/ai/translate-text", 
+        body: { userText: input , lang: lang}.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
+      # Check if the response is successful
+      if response.success?
+        translated_text = response.parsed_response["translatedText"]
+        
+        # Check if "translatedText" exists in the response
+        if translated_text
+          render json: { translatedText: translated_text }
+        else
+          render json: { error: 'Translated text not found in the response' }, status: :unprocessable_entity
         end
       else
         render json: { error: 'Failed to enhance text', details: response.body }, status: :bad_request

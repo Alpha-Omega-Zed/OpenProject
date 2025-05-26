@@ -11,10 +11,11 @@ import { HttpClient } from '@angular/common/http';
 import { WpAiSuggestionModalAugmentComponent } from '../wp-ai-suggestion-modal/wp-ai-suggestion-modal-augment.service';
 import { WpEnhanceTextButtonComponent } from '../wp-buttons/wp-enhance-text-button/wp-enhance-text-button.component';
 import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openproject-fields.module';
-import { EditableAttributeFieldComponent } from 'core-app/shared/components/fields/edit/field/editable-attribute-field.component';
 import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
 import { WpEnhancementDropdownComponent } from '../wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
 import { of, catchError } from 'rxjs';
+import { S } from '@fullcalendar/core/internal-common';
+import { console_log } from 'turbo_power/dist/types/actions';
 
 export class EditorSnapshot {
   private history: string[] = [];
@@ -109,10 +110,10 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
       return;
     }
 
-    const hostEl = this.host.nativeElement; 
-    const btnEl      = hostEl.querySelector('opce-enhance-button');
-    const dropdownEl = hostEl.querySelector('opce-enhancement-dropdown'); 
-    this.editorElement   = hostEl.querySelector('.editor-container');
+    const hostEl        = this.host.nativeElement; 
+    const btnEl         = hostEl.querySelector('opce-enhance-button');
+    const dropdownEl    = hostEl.querySelector('opce-enhancement-dropdown'); 
+    this.editorElement  = hostEl.querySelector('.editor-container');
 
     if (!btnEl || !this.editorElement) {
       console.error('Could not find button or editor inside <opce-editor-enhancer>');
@@ -131,42 +132,79 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     this.buttonComponent?.clicked.subscribe(() => this.enhanceDescription());
     this.dropdownComponent?.undo.subscribe(() => this.undoAction());
     this.dropdownComponent?.redo.subscribe(() => this.redoAction());
+    this.dropdownComponent?.translate.subscribe((lang: string) => this.translateDescription(lang));
   }
 
-  private enhanceDescription() {
+  private makeAIRequest(
+    url: string, returnField: string, cb: CallableFunction, 
+    errorCb: CallableFunction, loadingDone: CallableFunction, lang:string = ''
+  ) {
     const raw  = this.getContent();
 
     if(!raw){
       console.log("No text found...")
-      this.buttonComponent.setLoading(false); // Done loading
+      loadingDone();
       return; // No retrievable content, just ignore for now
     }
-    
+
     const text = this.stripHtml(raw);
 
-    console.log(`Text sent to 'ai': ${text}`)
+    console.log(`Text sent to '${url}': ${text}`)
 
-    this.http.post<{improvedText: string}>('/ai_services/enhance', { text })
-    .pipe(
-      catchError((error)=>{
-        console.error("Enhance request failed", error)
-        this.buttonComponent.loading = false
-        return of({ improvedText: null });
+    this.http.post<Record<string, string | null>>(url, {text, lang})
+      .pipe(
+        catchError((error) => {
+          errorCb(error);
+          return of({ [returnField]: null }); // Explicit fallback of correct type
       })
-    )
+      )
       .subscribe(r => {
-        if(!r.improvedText){
-          console.error("Failed to connect to ai microservice")
-          this.buttonComponent.setLoading(false) // Done loading
+        if(!r[returnField]){
+          console.error(`Failed to connect to ai microservice '${url}`);
+          loadingDone(); // Done loading
           return
         }
-
-        let options: string[];
-        console.log(`Improved text: ${r.improvedText}`)
-        try { options = JSON.parse(r.improvedText); }
-        catch { options = [r.improvedText]; }
-        this.aiModalAugment.spawnModal(options, (content: string)=>this.optionSelected(content));
+        cb(r[returnField]);
       });
+  }
+
+  private enhanceDescription() {
+    this.makeAIRequest(
+      '/ai_services/enhance',
+      'improvedText',
+      (result: string) => {
+        let options: string[];
+        console.log(`Improved text: ${result}`)
+        try { options = JSON.parse(result); }
+        catch { options = [result]; }
+        this.aiModalAugment.spawnModal(options, (content: string)=>this.optionSelected(content));
+      },
+      (error: any) => {
+        console.error("Enhance request failed", error);
+        this.buttonComponent.setLoading(false); // Done loading
+      },
+      () => this.buttonComponent.setLoading(false) // Done loading
+    )
+  }
+
+  private translateDescription(language: string) {
+    this.makeAIRequest(
+      '/ai_services/translate', 
+      'translatedText',
+      (result:string, content: string) => {;
+        let options: string[];
+        console.log(`Improved text: ${result}`)
+        try { options = JSON.parse(result); }
+        catch { options = [result]; }
+        this.aiModalAugment.spawnModal(options, (content: string)=>this.optionSelected(content));  
+      },
+      (error: any) => {
+        console.error("Translation request failed", error);
+        this.dropdownComponent.setLoading('translator', false); // Done loading translation
+      },
+      () => this.dropdownComponent.setLoading('translator', false) // Done loading translation
+      ,language // The target language
+    );
   }
 
   private undoAction(){

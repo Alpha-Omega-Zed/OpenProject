@@ -1,8 +1,8 @@
 <div #dropdown class="enhancement-dropdown-container">
-    <button class="wp-enhancement-dropdown" (click)="setToggled(!toggled)">
+    <button class="wp-enhancement-dropdown" (click)="setToggled('dropdown', !getToggled('dropdown'))">
         <i class="fa-solid fa-angle-down"></i>
     </button>
-    <div class="dropdown-menu" [style.display]="toggled ? 'block' : 'none'">
+    <div class="dropdown-menu" [style.display]="getToggled('dropdown') ? 'block' : 'none'">
       <ul>
         <li>
             <button (click)="undo.emit()">
@@ -13,6 +13,36 @@
             <button (click)="redo.emit()">
                 <i class="fa-solid fa-rotate-right"></i>Redo
             </button>
+        </li>
+        <li>
+            <button (click)="generateSubtasks.emit()">
+                <i class="fa-solid fa-list-check"></i><s>Subtask-ify</s> <!--WIP feature (inoperative)-->
+            </button>
+        </li>
+        <li>
+            <div 
+                #translator
+                role="button"
+                tabIndex="0" 
+                class="button-wrapper"
+                (click)="setToggled('translator', !getToggled('translator'))"
+            >
+                <i class="fa-solid fa-language"></i>Translate
+                <div class="language-menu" [style.display]="getToggled('translator') ? 'block' : 'none'">
+                    <ul>
+                        <li>
+                            <button (click)="onTranslate($event, 'english')">
+                                <b>EN</b><span style="display: inline-block; width: 2em;"></span>English
+                            </button>
+                        </li>
+                        <li>
+                            <button (click)="onTranslate($event, 'greek')">
+                                <b>GR</b><span style="display: inline-block; width: 2em;"></span>Greek
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </li>
       </ul>
     </div>

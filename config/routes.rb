@@ -844,6 +844,7 @@ Rails.application.routes.draw do
 
   scope controller: "ai_services" do
     post 'ai_services/enhance', action: 'enhance'
+    post 'ai_services/translate', action: 'translate'
     post 'ai_services/generate_subtasks', action: 'generate_subtasks'
   end
   
