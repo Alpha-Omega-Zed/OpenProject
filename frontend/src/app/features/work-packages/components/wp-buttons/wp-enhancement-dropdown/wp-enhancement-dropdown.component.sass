@@ -12,6 +12,7 @@ $separator: rgba(130, 100, 160, 0.15)
   position: relative
   display: inline-flex
   align-items: center
+  ovwerflow: visible
 
   .wp-enhancement-dropdown
     display: inline-flex
@@ -44,61 +45,3 @@ $separator: rgba(130, 100, 160, 0.15)
     &:focus
       outline: none
       box-shadow: 0 0 0 1px rgba($purple, 0.3)
-
-  .dropdown-menu
-    top: calc(100% + 4px)
-    left: 30px
-
-  .language-menu
-    top: 75%
-    left: -4px
-
-  .dropdown-menu, 
-  .language-menu
-    display: flex
-    align-items: center
-    justify-content: center
-    position: absolute
-    background: $menu-bg
-    border: 1px solid $separator
-    border-radius: 2px
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12)
-    z-index: 50
-    width: 160px
-    transform: translateX(-100%)
-
-    ul
-      list-style: none
-      margin: 0
-
-      li
-        margin: 0
-        padding: 0
-
-        button,
-        .button-wrapper
-          display: flex
-          align-items: center
-          justify-content: flex-start
-          width: 100%
-          padding: 10px 16px
-          background: none
-          border: none
-          font-size: 14px
-          color: $blue
-          text-align: left
-          cursor: pointer
-          transition: background 0.25s ease, color 0.25s ease
-
-          i
-            margin-right: 8px
-            font-size: 16px
-            color: inherit
-
-          &:hover
-            background: $hover-gradient
-            color: $text-color
-
-          &:active
-            background: $active-bg
-            color: $text-color

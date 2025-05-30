@@ -9,14 +9,14 @@
   (focusout)="onFocusChange()"
   (dragover)="startDragActivation($event)"
 >
-  <opce-editor-enhancer [focusedEvent]="focused">
+  <!-- <opce-editor-enhancer [focusedEvent]="focused"> -->
     <div
       #editContainer
       class="editor-container"
       [hidden]="!active"
     ></div>
 
-    <div 
+    <!-- <div 
       [class.inline]="inline"
       [class.forceOn]="forceAIGizmo"
       class="ai-enhancement-gizmo"
@@ -27,8 +27,8 @@
       <opce-enhancement-dropdown
         (toggleChanged)="onAiGizmoToggle($event)">
       </opce-enhancement-dropdown>
-    </div>
-</opce-editor-enhancer>
+    </div> -->
+<!-- </opce-editor-enhancer> -->
 
   <div
     (click)="activateIfEditable($event)"

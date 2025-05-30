@@ -1,0 +1,44 @@
+<div class="dropdown-menu">
+    <ul>
+    <li>
+        <button (click)="onUndo()">
+            <i class="fa-solid fa-rotate-left"></i>Undo
+        </button>
+    </li>
+    <li>
+        <button (click)="onRedo()">
+            <i class="fa-solid fa-rotate-right"></i>Redo
+        </button>
+    </li>
+    <li>
+        <button>
+            <i class="fa-solid fa-list-check"></i><s>Subtask-ify</s> <!--WIP feature (inoperative)-->
+        </button>
+    </li>
+    <li>
+        <div 
+            #translator
+            role="button"
+            tabIndex="0" 
+            class="button-wrapper"
+            (click)="setToggled('translator', !getToggled('translator'))"
+        >
+            <i class="fa-solid fa-language"></i>Translate
+            <div class="language-menu" [style.display]="getToggled('translator') ? 'block' : 'none'">
+                <ul>
+                    <li>
+                        <button (click)="onTranslate($event, 'english')">
+                            <b>EN</b><span style="display: inline-block; width: 2em;"></span>English
+                        </button>
+                    </li>
+                    <li>
+                        <button (click)="onTranslate($event, 'greek')">
+                            <b>GR</b><span style="display: inline-block; width: 2em;"></span>Greek
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </li>
+    </ul>
+</div>

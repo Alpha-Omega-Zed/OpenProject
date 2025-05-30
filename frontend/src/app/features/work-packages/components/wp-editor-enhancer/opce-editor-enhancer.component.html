@@ -1,3 +1,12 @@
-<div class="editor-enhancer">
-    <ng-content></ng-content>
+<div #editor class="editor-enhancer">
+    <div 
+    [class.inline]="inline"
+    [class.forceOn]="forceAIGizmo"
+    class="ai-enhancement-gizmo"
+>
+    <opce-enhance-button></opce-enhance-button>
+    <opce-enhancement-dropdown
+    (toggleChanged)="onAiGizmoToggle($event)">
+    </opce-enhancement-dropdown>
+    </div>
 </div>

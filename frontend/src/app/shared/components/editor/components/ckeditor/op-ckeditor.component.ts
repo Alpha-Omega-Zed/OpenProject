@@ -39,6 +39,7 @@ import { CKEditorSetupService } from 'core-app/shared/components/editor/componen
 import { KeyCodes } from 'core-app/shared/helpers/keyCodes.enum';
 import { debugLog } from 'core-app/shared/helpers/debug_output';
 import { UntilDestroyedMixin } from 'core-app/shared/helpers/angular/until-destroyed.mixin';
+import { OpEditorEnhancerService } from 'core-app/features/work-packages/components/wp-editor-enhancer/opce-editor-enhancer.service';
 
 declare module 'codemirror';
 
@@ -124,6 +125,7 @@ export class OpCkeditorComponent extends UntilDestroyedMixin implements OnInit, 
     private readonly I18n:I18nService,
     private readonly configurationService:ConfigurationService,
     private readonly ckEditorSetup:CKEditorSetupService,
+    private readonly opEditorEnhancerService:OpEditorEnhancerService,
   ) {
     super();
   }
@@ -258,6 +260,7 @@ export class OpCkeditorComponent extends UntilDestroyedMixin implements OnInit, 
         model.on('op:attachment-removed', () => document.body.dispatchEvent(new DragEvent('dragend')));
 
         this.initializeDone.emit(watchdog.editor);
+        this.opEditorEnhancerService.wrapEditor(this.elementRef.nativeElement);
         return watchdog.editor;
       });
 

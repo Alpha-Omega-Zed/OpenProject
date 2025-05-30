@@ -6,16 +6,15 @@ import {
   ViewEncapsulation,
   Input,
   EventEmitter,
+  ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WpAiSuggestionModalAugmentComponent } from '../wp-ai-suggestion-modal/wp-ai-suggestion-modal-augment.service';
 import { WpEnhanceTextButtonComponent } from '../wp-buttons/wp-enhance-text-button/wp-enhance-text-button.component';
-import { OpenprojectFieldsModule } from 'core-app/shared/components/fields/openproject-fields.module';
 import { OpCkeditorComponent } from 'core-app/shared/components/editor/components/ckeditor/op-ckeditor.component';
 import { WpEnhancementDropdownComponent } from '../wp-buttons/wp-enhancement-dropdown/wp-enhancement-dropdown.component';
 import { of, catchError } from 'rxjs';
-import { S } from '@fullcalendar/core/internal-common';
-import { console_log } from 'turbo_power/dist/types/actions';
 
 export class EditorSnapshot {
   private history: string[] = [];
@@ -69,7 +68,6 @@ export class EditorSnapshot {
   imports: [
     WpEnhanceTextButtonComponent,
     WpEnhancementDropdownComponent,
-    OpenprojectFieldsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -79,25 +77,43 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     private host: ElementRef<HTMLElement>,
     private http: HttpClient,
     private aiModalAugment: WpAiSuggestionModalAugmentComponent,
+    private cdRef: ChangeDetectorRef,
   ) {}
+
+  @ViewChild('editor', { static: true }) editorContainer!: ElementRef<HTMLElement>;
 
   private editorElement     : HTMLElement | null = null;
   private buttonComponent   : WpEnhanceTextButtonComponent;
   private dropdownComponent : WpEnhancementDropdownComponent;
   private history           : EditorSnapshot = new EditorSnapshot();
 
-  private _focusedEvent?: EventEmitter<null>;
+  public inline: boolean = false; // Whether this editor enhancer is used inline or not
+  public isTextInputField: boolean = false; // Whether this is a text input field or something else (e.g. dropdown)
+  public forceAIGizmo: boolean = false; // Whether the AI gizmo should be forced to be shown
+  public inFocus: boolean = false; // Whether the editor is focused or not
 
-  @Input() set focusedEvent(event: EventEmitter<null> | undefined) {
-    if(event && !this._focusedEvent){
-      console.log("Setting focused event")
-      this._focusedEvent = event;
-      this._focusedEvent.subscribe(() =>this.initComponents());
+  public _onFocusLossEvent?: EventEmitter<string>;
+  public _onFocusEvent?: EventEmitter<string>;
+
+  @Input() set onFocusEvent(event: EventEmitter<string> | undefined) {
+    if(event && !this._onFocusEvent){
+      this._onFocusEvent = event;
+      this._onFocusEvent.subscribe(()=>{
+          this.initComponents();
+          this.onFocusChange(); // Re-check focus state
+        }
+      );
     }
   }
 
-  get focusedEvent(): EventEmitter<null> | undefined {
-    return this._focusedEvent;
+  @Input() set onFocusLossEvent(event: EventEmitter<string> | undefined) {
+    if(event && !this._onFocusLossEvent){
+      this._onFocusLossEvent = event;
+      this._onFocusLossEvent.subscribe(()=>{
+          this.onFocusChange(); // Re-check focus state
+        }
+      );
+    }
   }
 
   ngAfterViewInit(): void {
@@ -110,10 +126,16 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
       return;
     }
 
-    const hostEl        = this.host.nativeElement; 
+    console.log("HTML structure: ", this.host.nativeElement.innerHTML);
+
+    const hostEl        = this.editorContainer.nativeElement; 
     const btnEl         = hostEl.querySelector('opce-enhance-button');
     const dropdownEl    = hostEl.querySelector('opce-enhancement-dropdown'); 
-    this.editorElement  = hostEl.querySelector('.editor-container');
+    this.editorElement  = hostEl.querySelector('op-ckeditor');
+
+    console.log("Button element:", btnEl);
+    console.log("Dropdown element:", dropdownEl);
+    console.log("Editor element:", this.editorElement);
 
     if (!btnEl || !this.editorElement) {
       console.error('Could not find button or editor inside <opce-editor-enhancer>');
@@ -225,12 +247,37 @@ export class OpceEditorEnhancerComponent implements AfterViewInit {
     }
   }
 
+  public onFocusChange(){
+    // Defer to ensure document.activeElement is up-to-date
+    setTimeout(() => {
+      console.log("Focus changed!")
+      const inFocus = this.host.nativeElement.contains(document.activeElement);
+
+      if(inFocus!=this.inFocus){
+        console.log(`Focus updated: [${inFocus}]`)
+        this.inFocus = inFocus;
+        this.inline = this.isInline(); // Trigger update
+
+        // Explicitly trigger change detection
+        this.cdRef.detectChanges();
+      }
+    });
+  }
+
+  public onAiGizmoToggle(state: any): void {
+    console.log(`From A.F.: Dropdown toggled: ${state.detail}`);
+    this.forceAIGizmo = state.detail;
+  }
+
+  private isInline(): boolean {
+    return !this.getEditorComponent();
+  }
+
   private getEditorComponent(): OpCkeditorComponent | undefined {
     if(!this.editorElement)
       return undefined;
 
-    const textElement = this.editorElement.querySelector('op-ckeditor')
-    return textElement?(window as any).ng.getComponent(textElement) as OpCkeditorComponent : undefined;
+    return (window as any).ng.getComponent(this.editorElement) as OpCkeditorComponent;
   }
 
   private getPlainText(): string | undefined {

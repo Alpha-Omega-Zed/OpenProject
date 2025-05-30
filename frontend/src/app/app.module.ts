@@ -488,8 +488,8 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-global-search-tabs', GlobalSearchTabsComponent, { injector });
     registerCustomElement('opce-zen-mode-toggle-button', ZenModeButtonComponent, { injector });
     registerCustomElement('opce-colors-autocompleter', ColorsAutocompleterComponent, { injector });
-    registerCustomElement('opce-enhance-button', WpEnhanceTextButtonComponent, { injector });                // AI Enhancer addon
-    registerCustomElement('opce-editor-enhancer', OpceEditorEnhancerComponent, { injector })                 //
-    registerCustomElement('opce-enhancement-dropdown', WpEnhancementDropdownComponent, { injector })         //
+    registerCustomElement('opce-enhance-button', WpEnhanceTextButtonComponent, { injector });                       // AI Enhancer addon
+    registerCustomElement('opce-editor-enhancer', OpceEditorEnhancerComponent, { injector })                        //
+    registerCustomElement('opce-enhancement-dropdown', WpEnhancementDropdownComponent, { injector })                //
   }
 }

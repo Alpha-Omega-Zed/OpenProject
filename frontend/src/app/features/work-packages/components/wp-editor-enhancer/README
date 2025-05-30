@@ -17,3 +17,5 @@ Last time you were working on the plugin for ckeditor with deepseek, but I'm not
 Either try to get that working (floating ui element in window), or come up with a simpler alternative
 
 Good luck.
+
+-- IMPORTANT: Ensure the editor is available on all edit fields, especially ckeditor fields (for example, in create project>advanced settings), there's a different wrapper around the editor
